@@ -1,14 +1,13 @@
 from selenium.webdriver.common.by import By
-
 import allure
 from ui.locators.main_page_locators import MainPageLocators
 from ui.pages.base_page import BasePage
-from ui.pages.events_page import EventsPage
+import re
 
 
 class MainPage(BasePage):
     """Главная страница рекламного кабинета"""
-    url = "https://ads.vk.com/hq/overview"
+    url_pattern = re.compile("https://ads.vk.com/hq/overview")
     locators = MainPageLocators
 
     @allure.step("Step 2")
