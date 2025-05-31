@@ -1,12 +1,13 @@
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
 from ui.pages.base_page import BasePage
 from ui.pages.main_page import MainPage
 import json
 import time
+import pathlib
 
+SCRIPT_DIRECTORY = pathlib.Path().absolute()
 
 @pytest.fixture()
 def driver(config):
@@ -27,14 +28,14 @@ def driver(config):
             desired_capabilities=capabilities,
         )
     elif browser == "chrome":
-        options.add_argument("--user-data-dir=vkads_userdata")
-        options.add_argument("profile-directory=vkads-profile")
-        driver = webdriver.Chrome(options)
+        options.add_argument(f"user-data-dir={SCRIPT_DIRECTORY}/user_data_dir")
+        driver = webdriver.Chrome(options=options)
+    elif browser == "firefox":
+        driver = webdriver.Firefox(options=options)
     else:
         raise RuntimeError(f'Unsupported browser: "{browser}"')
     driver.maximize_window()
     driver.get("https://ads.vk.com")
-    assert 2 + 2 == 228
     yield driver
     driver.quit()
 

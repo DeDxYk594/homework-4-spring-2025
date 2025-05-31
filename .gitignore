@@ -1,4 +1,5 @@
-vkads_userdata
+user_data_dir
 **/__pycache__
 .venv
 .pytest_cache
+.vscode

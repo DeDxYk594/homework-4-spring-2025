@@ -1,14 +1,15 @@
 from selenium.webdriver.common.by import By
 
 import allure
-from ui.locators import basic_locators
+from ui.locators.main_page_locators import MainPageLocators
 from ui.pages.base_page import BasePage
 from ui.pages.events_page import EventsPage
 
 
 class MainPage(BasePage):
-
-    locators = basic_locators.MainPageLocators()
+    """Главная страница рекламного кабинета"""
+    url = "https://ads.vk.com/hq/overview"
+    locators = MainPageLocators
 
     @allure.step("Step 2")
     def go_to_events_page(self):
