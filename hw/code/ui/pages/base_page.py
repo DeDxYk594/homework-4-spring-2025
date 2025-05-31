@@ -1,5 +1,4 @@
 import time
-import allure
 from selenium.webdriver.remote.webelement import WebElement
 from ui.locators import basic_locators
 from selenium.webdriver.support.wait import WebDriverWait
