@@ -36,3 +36,7 @@ class PlanCreationPageLocator:
         By.XPATH,
         "//button[.//*[contains(@class, 'vkuiIcon--calendar_outline_20')]]"
     )
+    DAY_SELECT = (
+        By.XPATH,
+        "//div[contains(@class, 'vkuiCalendarDay__inner')][.//span[@aria-hidden='true' and text()='19']]"
+    )

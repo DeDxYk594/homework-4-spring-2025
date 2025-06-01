@@ -35,9 +35,6 @@ class PlanCreationPage(BasePage):
         targeting_input.send_keys("100")
         
         self.click(self.locators.CALENDAR_BUTTON)
-        end_date_input = self.find(self.locators.END_DATE_INPUT)
-        end_date_input.clear()
-        end_date_input.send_keys("08.06.2025") 
+        self.click(self.locators.DAY_SELECT)
         time.sleep(10)
-        
         
