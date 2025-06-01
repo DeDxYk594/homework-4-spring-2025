@@ -16,3 +16,6 @@ class EntityDashboardPage(BasePage):
         row_elem = self.find(self.locators.PLAN_ROW)
         ActionChains(self.driver).move_to_element(row_elem).perform()
         self.click(self.locators.EDIT_BUTTON)
+        
+    def go_to_create_plan(self):
+        self.click(self.locators.CREATE_BUTTON)

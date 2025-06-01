@@ -10,3 +10,7 @@ class EntityDashboardPageLocator:
         By.XPATH,
         "//*[contains(concat(' ', @class, ' '), 'vkuiIcon--write_outline_20')]",
     )
+    CREATE_BUTTON = (
+    By.XPATH,
+    "//*[contains(concat(' ', @class, ' '), ' vkuiButton__content ') and text()='Создать']"
+    )
