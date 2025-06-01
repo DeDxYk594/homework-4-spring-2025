@@ -40,3 +40,23 @@ class PlanCreationPageLocator:
         By.XPATH,
         "//span[@class='vkuiButton__in'][.//span[text()='Продолжить']]"
     )
+    COUNTRY_SELECT = (
+        By.XPATH,
+        "//span[@class='vkuiButton__content' and text()='Москва']"
+    )
+    LOGO_SELECT = (
+        By.XPATH,
+        "//span[@class='vkuiButton__content'][.//span[@class='UploadMediaButton_buttonLogoTitle__vMc3N' and text()='Выбрать логотип']]"
+    )
+    CREATE_AI_BUTTON = (
+        By.XPATH,
+        "//div[contains(@class, 'vkuiTabsItem')][.//*[contains(text(), 'Созданное нейросетью')]]"
+    )
+    IMAGE_SELECT = (
+        By.XPATH,
+        "//div[contains(@class, 'ImageItem_image__wFT85')]"
+    )
+    TO_PUBLISH_BUTTON = (
+        By.XPATH,
+        "//span[@class='vkuiButton__in'][.//span[@class='vkuiButton__content' and text()='Опубликовать']]"
+    )
