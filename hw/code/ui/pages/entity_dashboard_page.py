@@ -12,6 +12,7 @@ class EntityDashboardPage(BasePage):
     def __init__(self, driver: WebDriver):
         super().__init__(driver)
 
-    def go_to_edit_campaign(self):
+    def go_to_edit_plan(self):
         row_elem = self.find(self.locators.PLAN_ROW)
         ActionChains(self.driver).move_to_element(row_elem).perform()
+        self.click(self.locators.EDIT_BUTTON)
