@@ -36,5 +36,7 @@ class PlanCreationPage(BasePage):
         
         self.click(self.locators.CALENDAR_BUTTON)
         self.click(self.locators.DAY_SELECT)
-        time.sleep(10)
+        time.sleep(1)
+        self.click(self.locators.CONTINUE_BUTTON)
+        
         

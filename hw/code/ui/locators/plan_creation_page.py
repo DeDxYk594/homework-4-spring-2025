@@ -28,10 +28,6 @@ class PlanCreationPageLocator:
         By.XPATH,
         "//input[@data-testid='budget']"
     )
-    END_DATE_INPUT = (
-        By.XPATH,
-        "//span[@data-testid='end-date']"
-    )
     CALENDAR_BUTTON = (
         By.XPATH,
         "//button[.//*[contains(@class, 'vkuiIcon--calendar_outline_20')]]"
@@ -39,4 +35,8 @@ class PlanCreationPageLocator:
     DAY_SELECT = (
         By.XPATH,
         "//div[contains(@class, 'vkuiCalendarDay__inner')][.//span[@aria-hidden='true' and text()='19']]"
+    )
+    CONTINUE_BUTTON = (
+        By.XPATH,
+        "//span[@class='vkuiButton__in'][.//span[text()='Продолжить']]"
     )
