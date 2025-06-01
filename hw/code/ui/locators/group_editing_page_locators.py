@@ -6,4 +6,7 @@ class GroupEditingPageLocators:
         By.XPATH,
         "//div[contains(@class, 'EditableTitle_container')]/*[contains(@class, 'vkuiIcon--write_outline_20')]",
     )
-    INPUT_ELEMENT = (By.XPATH, "//input")
+    SAVE_BUTTON = (
+        By.XPATH,
+        "//span[contains(@class, 'vkuiButton__content') and text()='Сохранить']",
+    )
