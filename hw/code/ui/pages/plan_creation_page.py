@@ -11,7 +11,7 @@ class PlanCreationPage(BasePage):
     def __init__(self, driver: WebDriver):
         super().__init__(driver)
 
-    def filling_out_form(self, ):
+    def filling_out_form_company_settings(self, ):
         self.click(self.locators.SITE_SELECT)
         
         site_url_input = self.find(self.locators.SITE_URL_INPUT)
@@ -37,6 +37,17 @@ class PlanCreationPage(BasePage):
         self.click(self.locators.CALENDAR_BUTTON)
         self.click(self.locators.DAY_SELECT)
         time.sleep(1)
+
+    
+    def go_to_continue(self):
         self.click(self.locators.CONTINUE_BUTTON)
         
+    def filling_out_form_ad_groups(self):
+        self.click(self.locators.COUNTRY_SELECT)
         
+    def filling_out_form_ads(self):
+        self.click(self.locators.LOGO_SELECT)
+        self.click(self.locators.CREATE_AI_BUTTON)
+        self.click(self.locators.IMAGE_SELECT)
+        time.sleep(5)
+        self.click(self.locators.TO_PUBLISH_BUTTON)
