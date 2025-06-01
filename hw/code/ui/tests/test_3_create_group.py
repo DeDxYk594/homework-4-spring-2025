@@ -8,5 +8,6 @@ def test_create_group(driver: WebDriver):
     driver.get("https://ads.vk.com/hq/dashboard/ad_plans")
     page = EntityDashboardPage(driver)
     page.is_opened()
-    page.go_to_edit_plan()
+    edit_plan_page = page.go_to_plan_editing()
+    edit_plan_page.go_to_group_editing()
     time.sleep(10)
