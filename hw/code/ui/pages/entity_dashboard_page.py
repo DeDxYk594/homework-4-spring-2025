@@ -25,4 +25,3 @@ class EntityDashboardPage(BasePage):
         self.click(self.locators.CREATE_BUTTON)
         next_page = PlanCreationPage(self.driver)
         return next_page
-    

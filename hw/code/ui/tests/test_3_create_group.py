@@ -9,5 +9,5 @@ def test_create_group(driver: WebDriver):
     page = EntityDashboardPage(driver)
     page.is_opened()
     edit_plan_page = page.go_to_plan_editing()
-    edit_plan_page()
+    edit_plan_page.go_to_group_editing()
     time.sleep(10)
