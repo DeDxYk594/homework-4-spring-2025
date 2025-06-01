@@ -6,3 +6,4 @@ class GroupEditingPageLocators:
         By.XPATH,
         "//div[contains(@class, 'EditableTitle_container')]/*[contains(@class, 'vkuiIcon--write_outline_20')]",
     )
+    INPUT_ELEMENT = (By.XPATH, "//input")
