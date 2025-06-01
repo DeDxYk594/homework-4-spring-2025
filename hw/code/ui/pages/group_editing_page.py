@@ -15,7 +15,7 @@ class GroupEditingPage(BasePage):
         super().__init__(driver)
 
     def change_title(self, new_title: str):
-        self.click(self.locators.EDITABLE_TITLE)
+        self.click(self.locators.EDITABLE_TITLE_EDIT_BUTTON)
         time.sleep(1)
         ActionChains(self.driver).send_keys(new_title).send_keys().send_keys(
             Keys.ENTER
@@ -23,3 +23,7 @@ class GroupEditingPage(BasePage):
 
     def save_changes(self):
         self.click(self.locators.SAVE_BUTTON)
+
+    def get_title(self):
+        title_element = self.find(self.locators.EDITABLE_TITLE)
+        return title_element.text
