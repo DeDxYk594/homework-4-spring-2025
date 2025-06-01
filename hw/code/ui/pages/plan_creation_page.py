@@ -29,20 +29,15 @@ class PlanCreationPage(BasePage):
         self.click(self.locators.AUTOBIDDING_MODE_INPUT)
         first_bidding_option = self.find(self.locators.AUTOBIDDING_MODE_INPUT)
         first_bidding_option.click()
-        time.sleep(10)
         
         targeting_input = self.find(self.locators.TARGETING_INPUT)
         targeting_input.clear()
         targeting_input.send_keys("100")
         
-        budget_input = self.find(self.locators.BUDGET_INPUT)
-        budget_input.clear()
-        budget_input.send_keys("10000") 
-
         self.click(self.locators.CALENDAR_BUTTON)
         end_date_input = self.find(self.locators.END_DATE_INPUT)
         end_date_input.clear()
-        end_date_input.send_keys("08.01.2025") 
+        end_date_input.send_keys("08.06.2025") 
+        time.sleep(10)
         
-        time.sleep(10) 
         
