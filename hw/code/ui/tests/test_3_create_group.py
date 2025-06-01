@@ -1,6 +1,5 @@
 # TODO: @zhugeo
 from selenium.webdriver.remote.webdriver import WebDriver
-from ..pages.main_page import MainPage
 from ..pages.entity_dashboard_page import EntityDashboardPage
 import time
 
