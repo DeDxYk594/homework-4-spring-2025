@@ -59,3 +59,6 @@ class BasePage(object):
         self.find(locator, timeout=timeout)
         elem = self.wait(timeout).until(EC.element_to_be_clickable(locator))
         elem.click()
+
+    def find_all(self, locator, timeout=10):
+        return self.wait(timeout).until(EC.presence_of_all_elements_located(locator))
