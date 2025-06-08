@@ -1,5 +1,6 @@
-from hw.code.ui.pages.base_page import BasePage
-from hw.code.ui.locators.ad_creation_page import AdCreationPageLocator
+from ..pages.base_page import BasePage
+from ..locators.ad_creation_page import AdCreationPageLocator
+from selenium.webdriver.remote.webdriver import WebDriver
 import re
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
@@ -8,7 +9,7 @@ from selenium.webdriver.common.by import By
 class AdCreationPage(BasePage):
     url_pattern = re.compile(r"ads\.vk\.com/hq/new_create/ad_plan")
 
-    def __init__(self, driver):
+    def __init__(self, driver:WebDriver):
         super().__init__(driver)
 
     def edit_campaign_title(self, name: str):
@@ -39,9 +40,6 @@ class AdCreationPage(BasePage):
     def select_moscow_region(self):
         self.click(AdCreationPageLocator.REGION_MOSCOW_BUTTON)
 
-    def click_continue(self):
-        self.click(AdCreationPageLocator.CONTINUE_BUTTON)
-
     def generate_title(self, title: str):
         self.click(AdCreationPageLocator.TITLE_GENERATE_ICON)
         self.wait().until(EC.presence_of_element_located(AdCreationPageLocator.GENERATED_TITLE_TEXTAREA))
@@ -62,7 +60,7 @@ class AdCreationPage(BasePage):
 
     def click_choose_logo(self):
         self.click((By.CSS_SELECTOR, "button[data-testid='set-global-image']"))
-    
+
     def open_photo_stock_tab(self):
         self.click((By.CSS_SELECTOR, "div[data-id='photo_stock_and_generated']"))
 
@@ -76,7 +74,7 @@ class AdCreationPage(BasePage):
             options[1].click()
         else:
             raise Exception("Не найдено второе изображение для выбора")
-        
+
     def select_second_stock_image(self):
         self.wait().until(EC.presence_of_all_elements_located(
             (By.CLASS_NAME, "PhotoStockImagesPreview_itemContent__DoHxc")

@@ -1,6 +1,6 @@
 from time import sleep
-from hw.code.ui.pages.base_page import BasePage
-from hw.code.ui.locators.audience_page import AudiencePageLocator
+from..pages.base_page import BasePage
+from..locators.audience_page import AudiencePageLocator
 import re
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -49,7 +49,3 @@ class AudiencePage(BasePage):
                 sleep(0.5)
                 self.driver.execute_script("arguments[0].click();", btn)
                 break
-
-
-
-        

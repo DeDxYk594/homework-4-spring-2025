@@ -1,19 +1,20 @@
 import time
 import pytest
-from hw.code.ui.pages.ad_creation_page import AdCreationPage
+from selenium.webdriver.remote.webdriver import WebDriver
+from ..pages.ad_creation_page import AdCreationPage
+
 
 @pytest.mark.ui
-def test_create_campaign_with_site(driver):
+def test_create_campaign_with_site(driver: WebDriver):
     driver.get("https://ads.vk.com/hq/new_create/ad_plan")
     page = AdCreationPage(driver)
 
     @pytest.mark.ui
-    def test_create_campaign_with_site(driver):
+    def test_create_campaign_with_site(driver: WebDriver):
         driver.get("https://ads.vk.com/hq/new_create/ad_plan")
         page = AdCreationPage(driver)
         page.edit_campaign_title("Новая кампания")
         page.select_site_option()
-
 
     # Выбираем тип рекламы "Сайт"
     page.select_site_option()
@@ -39,5 +40,3 @@ def test_create_campaign_with_site(driver):
     page.select_second_media_option()
     page.click_publish()
     # time.sleep(20)
-
-
