@@ -1,13 +1,15 @@
 from ..pages.base_page import BasePage
-from ..locators.ad_creation_page import AdCreationPageLocator
 from selenium.webdriver.remote.webdriver import WebDriver
 import re
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from ..locators.ad_creation_page import AdCreationPageLocator
+import time
 
 
 class AdCreationPage(BasePage):
-    url_pattern = re.compile(r"ads\.vk\.com/hq/new_create/ad_plan")
+    url_pattern = re.compile(r"ads.vk.com/hq/new_create/ad_plan/new-site_conversions.*")
+    locators =AdCreationPageLocator
 
     def __init__(self, driver:WebDriver):
         super().__init__(driver)
@@ -88,3 +90,33 @@ class AdCreationPage(BasePage):
 
     def click_publish(self):
         self.click((By.CSS_SELECTOR, "button[data-testid='submit-button']"))
+
+    def fill_with_simple_test_data(self):
+        """fills ad with the minimum required data to create ad"""
+        self.wait().until(EC.visibility_of_element_located(self.locators.HEADER_INPUT))
+        header = self.find(self.locators.HEADER_INPUT)
+        self.driver.execute_script("arguments[0].innerText = '';", header)
+        header.send_keys("Тестовое название")
+
+        self.wait().until(EC.visibility_of_element_located(self.locators.DESCRIPTION_INPUT))
+        desc = self.find(self.locators.DESCRIPTION_INPUT)
+        self.driver.execute_script("arguments[0].innerText = '';", desc)
+        desc.send_keys("Тестовое описание")
+
+        self.click(self.locators.LOGO_SELECT)
+
+        self.wait().until(EC.element_to_be_clickable(self.locators.IMAGE_SELECT))
+        self.click(self.locators.IMAGE_SELECT)
+
+        self.click(self.locators.MEDIA_BUTTON)
+
+        self.click(self.locators.IMAGE_SELECT)
+
+        self.click(self.locators.ADD_IMAGES_BUTTON)
+
+        time.sleep(5)
+
+        self.click(self.locators.SAVE_DRAFTS_BUTTON)
+
+        self.wait().until(EC.element_to_be_clickable(self.locators.TO_PUBLISH_BUTTON))
+        self.click(self.locators.TO_PUBLISH_BUTTON)

@@ -3,12 +3,13 @@ from..pages.base_page import BasePage
 from..locators.audience_page import AudiencePageLocator
 import re
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.remote.webdriver import WebDriver
 
 
 class AudiencePage(BasePage):
     url_pattern = re.compile(r"ads\.vk\.com/hq/audience")
 
-    def __init__(self, driver):
+    def __init__(self, driver:WebDriver):
         super().__init__(driver)
 
     def click_create_audience(self):

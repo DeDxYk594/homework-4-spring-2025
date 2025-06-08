@@ -13,7 +13,7 @@ class PageNotOpenedException(Exception):
     pass
 
 
-DEFAULT_TIMEOUT = 5
+DEFAULT_TIMEOUT = 8
 
 
 class BasePage(object):

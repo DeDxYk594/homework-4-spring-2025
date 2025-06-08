@@ -5,7 +5,7 @@ class PlanCreationPageLocator:
         By.XPATH, "//div[@data-id='site_conversions']"
     )
     SITE_URL_INPUT = (
-        By.XPATH, 
+        By.XPATH,
         "//input[@data-testid='site-select-input']"
     )
     OFFER_DESCRIPTION_TEXTAREA = (
@@ -39,46 +39,4 @@ class PlanCreationPageLocator:
     CONTINUE_BUTTON = (
         By.XPATH,
         "//span[@class='vkuiButton__in'][.//span[text()='Продолжить']]"
-    )
-    COUNTRY_SELECT = (
-        By.XPATH,
-        "//span[@class='vkuiButton__content' and text()='Москва']"
-    )
-    LOGO_SELECT = (
-        By.XPATH,
-        "//span[@class='vkuiButton__content'][.//span[@class='UploadMediaButton_buttonLogoTitle__vMc3N' and text()='Выбрать логотип']]"
-    )
-    IMAGE_SELECT = (
-        By.XPATH,
-        "//div[@class='ImageItem_image__XPwIQ']"
-    )
-    TO_PUBLISH_BUTTON = (
-        By.XPATH,
-        "//span[@class='vkuiButton__in'][.//span[@class='vkuiButton__content' and text()='Опубликовать']]"
-    )
-    HEADER_INPUT = (
-        By.XPATH,
-        "//div[contains(@class, 'EditableTextField__wrapper')]"
-        "/div[@contenteditable='true' and @data-testid='заголовок, макс. 40 символов']"
-    )
-    DESCRIPTION_INPUT = (
-        By.XPATH,
-        "//div[contains(@class, 'EditableTextField__wrapper')]"
-        "/div[@contenteditable='true' and @data-testid='описание, макс. 90 символов']"
-    )
-    MEDIA_BUTTON = (
-        By.XPATH,
-        "//div[@class='PhotoStockMediaFileSelector_section__FZFCU']"
-    )
-    ADD_IMAGES_BUTTON = (
-        By.XPATH,
-        "//button[@data-testid='submit' and contains(.//span, 'Добавить')]"
-    )
-    SAVE_DRAFTS_BUTTON = (
-        By.XPATH,
-        "//button[.//span[contains(text(), 'Сохранить черновик')]]"
-    )
-    IMAGES_SELECT = (
-        By.XPATH,
-        "div[contains(@class, 'ImageItem_image') and contains(@style, 'background-image: url')]"
     )
