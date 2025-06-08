@@ -3,3 +3,4 @@ user_data_dir
 .venv
 .pytest_cache
 .vscode
+.mypy_cache
