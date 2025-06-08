@@ -1,22 +1,29 @@
-# TODO: @zhugeo
+import pytest
 from selenium.webdriver.remote.webdriver import WebDriver
 from ..pages.entity_dashboard_page import EntityDashboardPage
-import time
-import random
+from ..pages.group_creation_page import GroupCreationPage
 
 
-def random_test_number():
-    return random.randint(0, 9999)
-
-
-def test_create_group(driver: WebDriver):
+@pytest.fixture
+def group_creation_page(driver: WebDriver):
     driver.get("https://ads.vk.com/hq/dashboard/ad_plans")
-    page = EntityDashboardPage(driver)
-    plan_editing_page = page.go_to_plan_editing()
-    group_editing_page = plan_editing_page.go_to_group_editing()
-    new_title = f"Новое название {random_test_number()}"
-    group_editing_page.change_title(new_title)
-    group_editing_page.save_changes()
-    driver.refresh()
-    assert group_editing_page.get_title() == new_title
-    time.sleep(10)
+    dashboard_page = EntityDashboardPage(driver)
+
+    plan_creation_page = dashboard_page.go_to_create_plan()
+    plan_creation_page.fill_with_simple_test_data()
+
+    return plan_creation_page.go_to_group_creation()
+
+
+def test_should_change_predicted_auditory_when_region_filter_selected(
+    driver: WebDriver, group_creation_page: GroupCreationPage
+):
+    # given
+    initial_predicted_auditory = group_creation_page.get_predicted_auditory()
+
+    # when
+    group_creation_page.select_city("Москва")
+    group_creation_page.wait_until_predicted_auditory_changed()
+
+    # then
+    assert group_creation_page.get_predicted_auditory() != initial_predicted_auditory

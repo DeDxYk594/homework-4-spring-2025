@@ -1,14 +1,15 @@
 from time import sleep
-from hw.code.ui.pages.base_page import BasePage
-from hw.code.ui.locators.audience_page import AudiencePageLocator
+from..pages.base_page import BasePage
+from..locators.audience_page_locators import AudiencePageLocator
 import re
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.remote.webdriver import WebDriver
 
 
 class AudiencePage(BasePage):
     url_pattern = re.compile(r"ads\.vk\.com/hq/audience")
 
-    def __init__(self, driver):
+    def __init__(self, driver:WebDriver):
         super().__init__(driver)
 
     def click_create_audience(self):
@@ -49,7 +50,3 @@ class AudiencePage(BasePage):
                 sleep(0.5)
                 self.driver.execute_script("arguments[0].click();", btn)
                 break
-
-
-
-        
