@@ -6,10 +6,10 @@ def test_create_plan(driver: WebDriver):
     dashboard_page = EntityDashboardPage(driver)
 
     plan_creation_page = dashboard_page.go_to_create_plan()
-    plan_creation_page.filling_out_form_company_settings()
+    plan_creation_page.fill_with_simple_test_data()
 
     group_creation_page = plan_creation_page.go_to_group_creation()
-    group_creation_page.filling_out_form_ad_groups()
+    group_creation_page.fill_with_simple_test_data()
 
     ad_creation_page = group_creation_page.go_to_ad_creation()
     ad_creation_page.fill_with_simple_test_data()

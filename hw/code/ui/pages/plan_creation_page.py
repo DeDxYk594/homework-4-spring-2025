@@ -1,6 +1,5 @@
 from .base_page import BasePage
 from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from ..locators.plan_creation_page_locators import PlanCreationPageLocator
@@ -14,9 +13,8 @@ class PlanCreationPage(BasePage):
 
     def __init__(self, driver: WebDriver):
         super().__init__(driver)
-        self._wait = WebDriverWait(driver, 10)
 
-    def filling_out_form_company_settings(self):
+    def fill_with_simple_test_data(self):
         self.click(self.locators.SITE_SELECT)
 
         site_url_input = self.find(self.locators.SITE_URL_INPUT)
@@ -46,7 +44,7 @@ class PlanCreationPage(BasePage):
         self.click(self.locators.DAY_SELECT)
 
     def wait_for_continue_button_enabled(self):
-        return self._wait.until(
+        return self.wait().until(
             EC.element_to_be_clickable(self.locators.CONTINUE_BUTTON)
         )
 

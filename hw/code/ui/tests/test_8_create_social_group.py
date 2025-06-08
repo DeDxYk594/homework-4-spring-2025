@@ -1,10 +1,8 @@
 from time import sleep
-import pytest
 from selenium.webdriver.remote.webdriver import WebDriver
 from ..pages.audience_page import AudiencePage
 
 
-@pytest.mark.ui
 def test_create_audience_with_social_group(driver: WebDriver):
     driver.get("https://ads.vk.com/hq/audience")
     page = AudiencePage(driver)

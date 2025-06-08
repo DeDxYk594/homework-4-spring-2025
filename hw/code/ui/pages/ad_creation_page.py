@@ -9,9 +9,9 @@ import time
 
 class AdCreationPage(BasePage):
     url_pattern = re.compile(r"ads.vk.com/hq/new_create/ad_plan/new-site_conversions.*")
-    locators =AdCreationPageLocator
+    locators = AdCreationPageLocator
 
-    def __init__(self, driver:WebDriver):
+    def __init__(self, driver: WebDriver):
         super().__init__(driver)
 
     def edit_campaign_title(self, name: str):
@@ -35,7 +35,6 @@ class AdCreationPage(BasePage):
         budget_input.clear()
         budget_input.send_keys(amount)
 
-
     def click_continue(self):
         self.click(self.locators.CONTINUE_BUTTON)
 
@@ -44,14 +43,18 @@ class AdCreationPage(BasePage):
 
     def generate_title(self, title: str):
         self.click(self.locators.TITLE_GENERATE_ICON)
-        self.wait().until(EC.presence_of_element_located(self.locators.GENERATED_TITLE_TEXTAREA))
+        self.wait().until(
+            EC.presence_of_element_located(self.locators.GENERATED_TITLE_TEXTAREA)
+        )
         textarea = self.find(self.locators.GENERATED_TITLE_TEXTAREA)
         textarea.clear()
         textarea.send_keys(title)
         self.click(self.locators.APPLY_GENERATED_TITLE_BUTTON)
 
     def select_second_stock_image(self):
-        images = self.find_all((By.CLASS_NAME, "PhotoStockImagesPreview_itemContent__DoHxc"))
+        images = self.find_all(
+            (By.CLASS_NAME, "PhotoStockImagesPreview_itemContent__DoHxc")
+        )
         if len(images) >= 2:
             images[1].click()
 
@@ -70,7 +73,11 @@ class AdCreationPage(BasePage):
         self.click((By.CSS_SELECTOR, "div[data-testid='image-media-item-loaded']"))
 
     def select_second_media_option(self):
-        self.wait().until(EC.presence_of_element_located((By.CSS_SELECTOR, "div[data-name^='content:::image_']")))
+        self.wait().until(
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, "div[data-name^='content:::image_']")
+            )
+        )
         options = self.find_all((By.CSS_SELECTOR, "div[data-name^='content:::image_']"))
         if len(options) >= 2:
             options[1].click()
@@ -78,15 +85,18 @@ class AdCreationPage(BasePage):
             raise Exception("Не найдено второе изображение для выбора")
 
     def select_second_stock_image(self):
-        self.wait().until(EC.presence_of_all_elements_located(
+        self.wait().until(
+            EC.presence_of_all_elements_located(
+                (By.CLASS_NAME, "PhotoStockImagesPreview_itemContent__DoHxc")
+            )
+        )
+        images = self.find_all(
             (By.CLASS_NAME, "PhotoStockImagesPreview_itemContent__DoHxc")
-        ))
-        images = self.find_all((By.CLASS_NAME, "PhotoStockImagesPreview_itemContent__DoHxc"))
+        )
         if len(images) >= 2:
             images[1].click()
         else:
             raise Exception("Второе изображение не найдено в фотостоке")
-
 
     def click_publish(self):
         self.click((By.CSS_SELECTOR, "button[data-testid='submit-button']"))
@@ -98,7 +108,9 @@ class AdCreationPage(BasePage):
         self.driver.execute_script("arguments[0].innerText = '';", header)
         header.send_keys("Тестовое название")
 
-        self.wait().until(EC.visibility_of_element_located(self.locators.DESCRIPTION_INPUT))
+        self.wait().until(
+            EC.visibility_of_element_located(self.locators.DESCRIPTION_INPUT)
+        )
         desc = self.find(self.locators.DESCRIPTION_INPUT)
         self.driver.execute_script("arguments[0].innerText = '';", desc)
         desc.send_keys("Тестовое описание")
