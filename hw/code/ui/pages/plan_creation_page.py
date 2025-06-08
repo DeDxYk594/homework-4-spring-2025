@@ -1,7 +1,9 @@
+import time
 from .base_page import BasePage
 from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from ..locators.plan_creation_page import PlanCreationPageLocator
-import time
 import re
 
 class PlanCreationPage(BasePage):
@@ -10,8 +12,9 @@ class PlanCreationPage(BasePage):
     
     def __init__(self, driver: WebDriver):
         super().__init__(driver)
-
-    def filling_out_form_company_settings(self, ):
+        self._wait = WebDriverWait(driver, 10)
+    
+    def filling_out_form_company_settings(self):
         self.click(self.locators.SITE_SELECT)
         
         site_url_input = self.find(self.locators.SITE_URL_INPUT)
@@ -36,18 +39,44 @@ class PlanCreationPage(BasePage):
         
         self.click(self.locators.CALENDAR_BUTTON)
         self.click(self.locators.DAY_SELECT)
-        time.sleep(1)
-
+    
+    def wait_for_continue_button_enabled(self):
+        return self._wait.until(
+            EC.element_to_be_clickable(self.locators.CONTINUE_BUTTON)
+        )
     
     def go_to_continue(self):
+        self.wait_for_continue_button_enabled()
         self.click(self.locators.CONTINUE_BUTTON)
         
     def filling_out_form_ad_groups(self):
         self.click(self.locators.COUNTRY_SELECT)
         
     def filling_out_form_ads(self):
+        self._wait.until(EC.visibility_of_element_located(self.locators.HEADER_INPUT))
+        header = self.find(self.locators.HEADER_INPUT)
+        self.driver.execute_script("arguments[0].innerText = '';", header)
+        header.send_keys("Тестовое название")
+        
+        self._wait.until(EC.visibility_of_element_located(self.locators.DESCRIPTION_INPUT))
+        desc = self.find(self.locators.DESCRIPTION_INPUT)
+        self.driver.execute_script("arguments[0].innerText = '';", desc) 
+        desc.send_keys("Тестовое описание")
+        
         self.click(self.locators.LOGO_SELECT)
-        self.click(self.locators.CREATE_AI_BUTTON)
+        
+        self._wait.until(EC.element_to_be_clickable(self.locators.IMAGE_SELECT))
         self.click(self.locators.IMAGE_SELECT)
+        
+        self.click(self.locators.MEDIA_BUTTON)
+        
+        self.click(self.locators.IMAGE_SELECT)
+                
+        self.click(self.locators.ADD_IMAGES_BUTTON)
+        
         time.sleep(5)
+        
+        self.click(self.locators.SAVE_DRAFTS_BUTTON)
+        
+        self._wait.until(EC.element_to_be_clickable(self.locators.TO_PUBLISH_BUTTON))
         self.click(self.locators.TO_PUBLISH_BUTTON)
