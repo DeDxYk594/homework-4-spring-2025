@@ -2,6 +2,8 @@
 
 ### Настройка
 
+Требуется Python 3.12+
+
 ```bash
 python3 -m venv .venv
 
@@ -10,4 +12,4 @@ source .venv/bin/activate  # linux || mac || (windows && gitbash)
 pip install -r requirements.txt
 ```
 
-Далее для windows надо исправить [ошибку](https://support.google.com/chrome/thread/127174847?hl=en&msgid=127180089).
+Далее надо запустить dump_session.py и в открывшемся браузере залогиниться, после чего будет создана директория user_data_dir

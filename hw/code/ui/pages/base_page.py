@@ -1,15 +1,15 @@
-import time
 from selenium.webdriver.remote.webelement import WebElement
 from ui.locators import basic_locators
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from typing import Tuple, final, Optional
 from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.common.exceptions import TimeoutException
 import re
 from ..utils import Locator
 
 
-class PageNotOpenedExeption(Exception):
+class PageNotOpenedException(Exception):
     pass
 
 
@@ -23,20 +23,25 @@ class BasePage(object):
 
     def __init__(self, driver: WebDriver):
         self.driver = driver
-        self.is_opened()
+        self.wait_until_opened()
 
     @final
-    def is_opened(self, timeout: Optional[int] = None):
+    def wait_until_opened(self, timeout: Optional[int] = None):
+        """Wait for the page to be opened by checking URL pattern match."""
         timeout = timeout or DEFAULT_TIMEOUT
-        started = time.time()
-        while time.time() - started < timeout:
-            url_without_prefix = self.driver.current_url.removeprefix("https://")
-            if self.url_pattern.fullmatch(url_without_prefix):
-                return True
 
-        raise PageNotOpenedExeption(
-            f"{self.url_pattern} did not open in {timeout} sec, current url {self.driver.current_url}"
-        )
+        def current_url_matches_pattern(driver: WebDriver) -> bool:
+            url_without_prefix = driver.current_url.removeprefix("https://")
+            return bool(self.url_pattern.fullmatch(url_without_prefix))
+
+        try:
+            self.wait(timeout).until(current_url_matches_pattern)
+            return True
+        except TimeoutException:
+            raise PageNotOpenedException(
+                f"{self.url_pattern} did not open in {timeout} sec, current url {self.driver.current_url}"
+            )
+
 
     @final
     def wait(self, timeout: Optional[int] = None):
