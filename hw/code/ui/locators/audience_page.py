@@ -19,6 +19,10 @@ class AudiencePageLocator:
         ".GroupContentItem_item__6gQso"
     )
 
+    EXIT_GROUP_SELECTION_TITLE = (
+        By.XPATH,
+        "//h2[text()='Подписчики сообществ']"
+    )
 
+    SAVE_BUTTON = (By.CSS_SELECTOR, 'button[data-testid="submit"]')
 
-    SAVE_BUTTON = (By.XPATH, "//button[@type='submit' and .//span[contains(text(), 'Сохранить')]]")

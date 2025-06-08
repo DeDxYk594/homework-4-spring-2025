@@ -1,6 +1,3 @@
-# TODO: @Achpochmak
-
-
 from time import sleep
 import pytest
 from hw.code.ui.pages.audience_page import AudiencePage
@@ -12,13 +9,6 @@ def test_create_audience_with_social_group(driver):
     page = AudiencePage(driver)
     page.click_create_audience()
 
-
-
-    # # Ожидаем появления модалки (если нужно)
-    # WebDriverWait(driver, 10).until(
-    #     EC.presence_of_element_located(AudiencePageLocator.AUDIENCE_NAME_INPUT)
-    # )
-
     page.enter_audience_name("Новая аудитория РИА")
     page.click_add_source()
 
@@ -27,13 +17,10 @@ def test_create_audience_with_social_group(driver):
     sleep(2)
     page.click_communities_header()
     sleep(1)
-    page.click_first_group_result()# тут будет клик по нужному сообществу, если оно отобразится
-
-    # page.click_communities_header()
-    # page.click_first_group_result()
-
-
-
-    # page.select_first_group()
+    page.click_first_group_result()
+    page.click_exit_group_selection()
+    sleep(1)
+    print("Нажимаем Сохранить")
     page.click_save_button()
+
     page.click_save_button()  # сохранение на втором экране
