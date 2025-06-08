@@ -1,6 +1,6 @@
 from time import sleep
 from..pages.base_page import BasePage
-from..locators.audience_page import AudiencePageLocator
+from..locators.audience_page_locators import AudiencePageLocator
 import re
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.remote.webdriver import WebDriver

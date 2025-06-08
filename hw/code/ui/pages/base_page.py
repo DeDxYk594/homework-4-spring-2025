@@ -42,7 +42,6 @@ class BasePage(object):
                 f"{self.url_pattern} did not open in {timeout} sec, current url {self.driver.current_url}"
             )
 
-
     @final
     def wait(self, timeout: Optional[int] = None):
         timeout = timeout or DEFAULT_TIMEOUT
@@ -60,5 +59,5 @@ class BasePage(object):
         elem = self.wait(timeout).until(EC.element_to_be_clickable(locator))
         elem.click()
 
-    def find_all(self, locator, timeout=10):
+    def find_all(self, locator: Locator, timeout: Optional[int] = None):
         return self.wait(timeout).until(EC.presence_of_all_elements_located(locator))

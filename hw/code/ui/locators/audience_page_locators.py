@@ -6,9 +6,7 @@ class AudiencePageLocator:
 
     AUDIENCE_NAME_INPUT = (By.CSS_SELECTOR, "input.vkuiInput__el")
 
-    ADD_SOURCE_BUTTON = (By.XPATH, "//button[.='Добавить источник']")  
-
-    SOCIAL_GROUP_BUTTON = (By.CSS_SELECTOR, "[data-testid='appsAndGroups']")
+    ADD_SOURCE_BUTTON = (By.XPATH, "//button[.='Добавить источник']")
 
     SEARCH_INPUT = (By.CSS_SELECTOR, "[data-testid='search-input']")
 
@@ -25,4 +23,3 @@ class AudiencePageLocator:
     )
 
     SAVE_BUTTON = (By.CSS_SELECTOR, 'button[data-testid="submit"]')
-

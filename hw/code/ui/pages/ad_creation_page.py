@@ -3,7 +3,7 @@ from selenium.webdriver.remote.webdriver import WebDriver
 import re
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from ..locators.ad_creation_page import AdCreationPageLocator
+from ..locators.ad_creation_page_locators import AdCreationPageLocator
 import time
 
 
@@ -15,40 +15,40 @@ class AdCreationPage(BasePage):
         super().__init__(driver)
 
     def edit_campaign_title(self, name: str):
-        self.click(AdCreationPageLocator.TITLE_EDIT_ICON)
-        title_input = self.find(AdCreationPageLocator.TITLE_INPUT)
+        self.click(self.locators.TITLE_EDIT_ICON)
+        title_input = self.find(self.locators.TITLE_INPUT)
         self.driver.execute_script("arguments[0].innerText = '';", title_input)
         title_input.clear()
         title_input.send_keys(name)
 
     def select_site_option(self):
-        self.click(AdCreationPageLocator.SITE_OPTION)
+        self.click(self.locators.SITE_OPTION)
 
     def enter_site_url(self, url: str):
-        site_input = self.find(AdCreationPageLocator.SITE_INPUT)
+        site_input = self.find(self.locators.SITE_INPUT)
         site_input.clear()
         site_input.send_keys(url)
 
     def enter_budget(self, amount: str):
-        self.wait().until(EC.presence_of_element_located(AdCreationPageLocator.BUDGET_INPUT))
-        budget_input = self.find(AdCreationPageLocator.BUDGET_INPUT)
+        self.wait().until(EC.presence_of_element_located(self.locators.BUDGET_INPUT))
+        budget_input = self.find(self.locators.BUDGET_INPUT)
         budget_input.clear()
         budget_input.send_keys(amount)
 
 
     def click_continue(self):
-        self.click(AdCreationPageLocator.CONTINUE_BUTTON)
+        self.click(self.locators.CONTINUE_BUTTON)
 
     def select_moscow_region(self):
-        self.click(AdCreationPageLocator.REGION_MOSCOW_BUTTON)
+        self.click(self.locators.REGION_MOSCOW_BUTTON)
 
     def generate_title(self, title: str):
-        self.click(AdCreationPageLocator.TITLE_GENERATE_ICON)
-        self.wait().until(EC.presence_of_element_located(AdCreationPageLocator.GENERATED_TITLE_TEXTAREA))
-        textarea = self.find(AdCreationPageLocator.GENERATED_TITLE_TEXTAREA)
+        self.click(self.locators.TITLE_GENERATE_ICON)
+        self.wait().until(EC.presence_of_element_located(self.locators.GENERATED_TITLE_TEXTAREA))
+        textarea = self.find(self.locators.GENERATED_TITLE_TEXTAREA)
         textarea.clear()
         textarea.send_keys(title)
-        self.click(AdCreationPageLocator.APPLY_GENERATED_TITLE_BUTTON)
+        self.click(self.locators.APPLY_GENERATED_TITLE_BUTTON)
 
     def select_second_stock_image(self):
         images = self.find_all((By.CLASS_NAME, "PhotoStockImagesPreview_itemContent__DoHxc"))

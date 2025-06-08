@@ -1,10 +1,9 @@
-import time
 from .base_page import BasePage
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
-from ..locators.plan_creation_page import PlanCreationPageLocator
+from ..locators.plan_creation_page_locators import PlanCreationPageLocator
 from ..pages.group_creation_page import GroupCreationPage
 import re
 

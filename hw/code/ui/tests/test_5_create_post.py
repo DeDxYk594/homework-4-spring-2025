@@ -1,15 +1,12 @@
 import time
-import pytest
 from selenium.webdriver.remote.webdriver import WebDriver
 from ..pages.ad_creation_page import AdCreationPage
 
 
-@pytest.mark.ui
 def test_create_campaign_with_site(driver: WebDriver):
     driver.get("https://ads.vk.com/hq/new_create/ad_plan")
     page = AdCreationPage(driver)
 
-    @pytest.mark.ui
     def test_create_campaign_with_site(driver: WebDriver):
         driver.get("https://ads.vk.com/hq/new_create/ad_plan")
         page = AdCreationPage(driver)
