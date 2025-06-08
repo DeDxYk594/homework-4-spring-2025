@@ -1,3 +1,4 @@
+import time
 from .base_page import BasePage
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -52,8 +53,30 @@ class PlanCreationPage(BasePage):
         self.click(self.locators.COUNTRY_SELECT)
         
     def filling_out_form_ads(self):
+        self._wait.until(EC.visibility_of_element_located(self.locators.HEADER_INPUT))
+        header = self.find(self.locators.HEADER_INPUT)
+        self.driver.execute_script("arguments[0].innerText = '';", header)
+        header.send_keys("Тестовое название")
+        
+        self._wait.until(EC.visibility_of_element_located(self.locators.DESCRIPTION_INPUT))
+        desc = self.find(self.locators.DESCRIPTION_INPUT)
+        self.driver.execute_script("arguments[0].innerText = '';", desc) 
+        desc.send_keys("Тестовое описание")
+        
         self.click(self.locators.LOGO_SELECT)
-        self.click(self.locators.CREATE_AI_BUTTON)
-        self._wait.until(EC.presence_of_element_located(self.locators.IMAGE_SELECT))
+        
+        self._wait.until(EC.element_to_be_clickable(self.locators.IMAGE_SELECT))
         self.click(self.locators.IMAGE_SELECT)
+        
+        self.click(self.locators.MEDIA_BUTTON)
+        
+        self.click(self.locators.IMAGE_SELECT)
+                
+        self.click(self.locators.ADD_IMAGES_BUTTON)
+        
+        time.sleep(5)
+        
+        self.click(self.locators.SAVE_DRAFTS_BUTTON)
+        
+        self._wait.until(EC.element_to_be_clickable(self.locators.TO_PUBLISH_BUTTON))
         self.click(self.locators.TO_PUBLISH_BUTTON)
