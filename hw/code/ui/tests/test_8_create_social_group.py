@@ -1,11 +1,15 @@
 import time
 import pytest
+import os
+from pathlib import Path
+from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
 from ..pages.audience_page import AudiencePage
 from ..locators.audience_page_locators import AudiencePageLocator 
+from ..locators.audience_page_locators import AppCategoryLocators
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
@@ -16,23 +20,18 @@ def test_audience_landing_page(driver):
     driver.get("https://ads.vk.com/hq/audience")
     wait = WebDriverWait(driver, 10)
 
-    # Проверка заглушки: "Аудиторий пока нет"
-    stub = wait.until(EC.presence_of_element_located(
-        (By.XPATH, "//span[contains(text(), 'Аудиторий пока нет')]")
-    ))
+    stub = wait.until(EC.presence_of_element_located(AudiencePageLocator.STUB_NO_AUDIENCES_TEXT))
     assert stub.is_displayed()
 
-    # Проверка кнопки "Создать аудиторию"
-    create_btn = driver.find_element(By.CSS_SELECTOR, "[data-testid='create-audience']")
+    create_btn = driver.find_element(*AudiencePageLocator.CREATE_AUDIENCE_BUTTON)
     assert create_btn.is_displayed()
 
-    # Проверка кнопки дополнительных действий (три точки)
-    more_menu = driver.find_element(By.CSS_SELECTOR, "[data-testid='other-buttons']")
+    more_menu = driver.find_element(*AudiencePageLocator.MORE_MENU_BUTTON)
     assert more_menu.is_displayed()
 
-    # Проверка справочной ссылки
-    help_link = driver.find_element(By.XPATH, "//a[contains(@href, '/help/features/audiences_lists/audiences')]")
+    help_link = driver.find_element(*AudiencePageLocator.HELP_LINK)
     assert help_link.is_displayed()
+
 
 
 def test_create_audience_with_social_group(driver): 
@@ -52,7 +51,6 @@ def test_create_audience_with_social_group(driver):
     page.click_save_button()
     page.click_save_button()  # сохранение на втором экране
 
-    # sleep(10)
 
 
 #Проверка появления формы создания
@@ -113,6 +111,7 @@ def test_empty_name_disables_save(driver):
 
     assert is_disabled, "Ожидается, что кнопка 'Сохранить' будет отключена при пустом имени"
 
+
 #Название длиннее 255 символов → ошибка
 def test_name_too_long_shows_error(driver):
     driver.get("https://ads.vk.com/hq/audience")
@@ -154,20 +153,17 @@ def test_cancel_button_returns(driver):
     page = AudiencePage(driver)
     page.click_create_audience()
 
-    # Клик по "Отмена"
     cancel_button = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.CSS_SELECTOR, "button[data-testid='cancel']"))
+        EC.element_to_be_clickable(AudiencePageLocator.MODAL_CANCEL_BUTTON)
     )
     cancel_button.click()
 
-    # Проверяем, что форма действительно исчезла
     WebDriverWait(driver, 10).until(
-        EC.invisibility_of_element_located((By.CSS_SELECTOR, "[data-testid='create-audience-form']"))
+        EC.invisibility_of_element_located(AudiencePageLocator.CREATE_AUDIENCE_FORM)
     )
 
-    # Альтернативно: просто подождать исчезновение любой модалки
     WebDriverWait(driver, 10).until_not(
-        EC.presence_of_element_located((By.CLASS_NAME, "vkuiModalRoot"))
+        EC.presence_of_element_located(AudiencePageLocator.MODAL_ROOT)
     )
 
 
@@ -180,15 +176,10 @@ def test_unsaved_changes_confirmation_with_escape(driver):
     page.click_create_audience()
     page.enter_audience_name("Черновик")
 
-    # Отправляем Escape на активный элемент (или на <body>)
     driver.switch_to.active_element.send_keys(Keys.ESCAPE)
 
-    # Проверяем, что появилось предупреждение
     confirm_popup = WebDriverWait(driver, 5).until(
-        EC.visibility_of_element_located((
-            By.XPATH,
-            "//div[contains(@data-testid, 'modal-confirm')]//span[contains(text(), 'Прервать создание?')]"
-        ))
+        EC.visibility_of_element_located(AudiencePageLocator.UNSAVED_CHANGES_MODAL)
     )
     assert confirm_popup.is_displayed()
 
@@ -198,19 +189,16 @@ def test_exclude_source_menu_opens(driver):
     driver.get("https://ads.vk.com/hq/audience")
     page = AudiencePage(driver)
     page.click_create_audience()
-
-    # Нажать "Исключить источник"
     page.click_exclude_source()
 
-    # Проверка наличия категорий
     WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, "//span[contains(text(),'Мои аудитории')]"))
+        EC.visibility_of_element_located(AudiencePageLocator.EXCLUDE_CATEGORY_MY_AUDIENCES)
     )
     WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, "//span[contains(text(),'По событиям или реакциям пользователей')]"))
+        EC.visibility_of_element_located(AudiencePageLocator.EXCLUDE_CATEGORY_USER_REACTIONS)
     )
     WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, "//span[contains(text(),'По интересам')]"))
+        EC.visibility_of_element_located(AudiencePageLocator.EXCLUDE_CATEGORY_INTERESTS)
     )
 
 
@@ -243,19 +231,20 @@ def test_added_source_disappears_from_list(driver):
 
 
 
-#Категории мобильного приложения
+# #Категории мобильного приложения
 def test_add_app_category_source(driver):
     driver.get("https://ads.vk.com/hq/audience")
     page = AudiencePage(driver)
     page.click_create_audience()
-    page.enter_audience_name("Аудитория с категориями приложений")
+    audience_name = "Аудитория с категориями приложений"
+    page.enter_audience_name(audience_name)
 
     page.click_add_source()
     page.click_app_category_button()
 
     # Платформа
     platform_input = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.CSS_SELECTOR, "input[data-testid='sources.app_category.platform_selector']"))
+        EC.element_to_be_clickable(AppCategoryLocators.PLATFORM_SELECTOR)
     )
     platform_input.click()
     platform_input.send_keys("iOS")
@@ -263,26 +252,36 @@ def test_add_app_category_source(driver):
 
     # Категория
     category_input = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, "input[data-testid='sources.app_category.category_selector']"))
+        EC.presence_of_element_located(AppCategoryLocators.CATEGORY_SELECTOR)
     )
     driver.execute_script("arguments[0].click();", category_input)
     category_input.send_keys(Keys.ARROW_DOWN)
     category_input.send_keys(Keys.ENTER)
 
     install_type_input = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.CSS_SELECTOR, "input[data-testid='sources.app_category.install_type_selector']"))
+        EC.element_to_be_clickable(AppCategoryLocators.INSTALL_TYPE_SELECTOR)
     )
     install_type_input.click()
     install_type_input.send_keys(Keys.ARROW_DOWN)
     install_type_input.send_keys(Keys.ENTER)
 
-
+    page.click_save_button()
     page.click_save_button()
 
-    page.click_save_button()
+    added_source = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located(AudiencePageLocator.ADDED_SOURCE_APP_CATEGORY)
+    )
+    assert added_source.is_displayed(), "Источник с категориями мобильного приложения не отображается"
+
+    created_audience = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located(
+            AudiencePageLocator.CREATED_AUDIENCE_NAME_TEMPLATE(audience_name)
+        )
+    )
+    assert created_audience.is_displayed(), "Созданная аудитория не появилась в списке"
 
 
-def test_add_app_category_source(driver):
+def test_add_social_group_source(driver):
     driver.get("https://ads.vk.com/hq/audience")
     page = AudiencePage(driver)
     page.click_create_audience()
@@ -313,3 +312,162 @@ def test_add_app_category_source(driver):
         EC.visibility_of_element_located((By.CSS_SELECTOR, "[data-testid='modal-confirm']"))
     )
     assert confirmation_modal.is_displayed(), "Модальное окно подтверждения удаления не появилось"
+
+#Источник Список пользователей из файла
+def test_upload_user_list_file(driver):
+    driver.get("https://ads.vk.com/hq/audience")
+    page = AudiencePage(driver)
+
+    audience_name = "Аудитория по списку пользователей"
+    page.click_create_audience()
+    page.enter_audience_name(audience_name)
+
+    page.click_add_source()
+
+    WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(AudiencePageLocator.USERS_LIST_BUTTON)
+    ).click()
+
+
+    WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(AudiencePageLocator.TAB_UPLOAD_NEW)
+    ).click()
+   
+    combobox = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(AudiencePageLocator.LIST_TYPE_COMBOBOX)
+    )
+    combobox.click()
+
+    vk_option = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.XPATH, "//div[contains(@class, 'CustomSelectOption') and text()='ID ВКонтакте']"))
+    )
+    vk_option.click()
+
+ 
+    file_input = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located(AudiencePageLocator.FILE_UPLOAD_INPUT)
+    )
+    abs_path = Path.cwd() / "extra files" / "users1.txt"
+    file_input.send_keys(str(abs_path))
+
+    page.click_save_button()
+
+    source_selector = (By.XPATH, "//span[@data-testid='header' and contains(text(), 'Список пользователей')]")
+    source_element = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located(source_selector)
+    )
+    assert source_element.is_displayed(), "Источник 'Список пользователей' не появился после загрузки файла"
+
+#Проверка появления уведомления о том, что в загружаемом списке недостаточно записей
+def test_upload_empty_user_list_file(driver):
+    driver.get("https://ads.vk.com/hq/audience")
+    page = AudiencePage(driver)
+
+    audience_name = "Аудитория с пустым списком"
+    page.click_create_audience()
+    page.enter_audience_name(audience_name)
+
+    page.click_add_source()
+
+    WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(AudiencePageLocator.USERS_LIST_BUTTON)
+    ).click()
+
+    WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(AudiencePageLocator.TAB_UPLOAD_NEW)
+    ).click()
+
+    combobox = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable(AudiencePageLocator.LIST_TYPE_COMBOBOX)
+    )
+    combobox.click()
+
+    vk_option = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.XPATH, "//div[contains(@class, 'CustomSelectOption') and text()='ID ВКонтакте']"))
+    )
+    vk_option.click()
+
+    file_input = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located(AudiencePageLocator.FILE_UPLOAD_INPUT)
+    )
+    abs_path = Path.cwd() / "extra files" / "empty.txt"
+    file_input.send_keys(str(abs_path))
+
+    page.click_save_button()
+
+    error_snackbar_selector = (By.XPATH, "//div[contains(@class, 'Snackbar_text__pDXKB') and text()='В списке недостаточно записей']")
+    error_element = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located(error_snackbar_selector)
+    )
+    assert error_element.is_displayed(), "Оповещение о недостаточности записей не появилось"
+
+    WebDriverWait(driver, 10).until_not(
+        EC.visibility_of_element_located(error_snackbar_selector)
+    )
+
+
+#Существуют кнопки "Редактировать", "Настроить доступ", "Удалить"
+def test_audience_list_has_rows_and_menu(driver):
+    driver.get("https://ads.vk.com/hq/audience")
+
+    first_row = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.XPATH, "//div[@role='row' and contains(@class, 'BaseTable__row')]"))
+    )
+
+    ActionChains(driver).move_to_element(first_row).perform()
+
+    menu_button = WebDriverWait(driver, 5).until(
+        EC.element_to_be_clickable((By.XPATH, "//button[@data-testid='audience-item-menu']"))
+    )
+    menu_button.click()
+
+    menu_container = WebDriverWait(driver, 5).until(
+        EC.presence_of_element_located((By.CLASS_NAME, "ContextMenu_dropdown__8lPu0"))
+    )
+
+    menu_labels = menu_container.find_elements(By.XPATH, ".//label//span[contains(@class, 'vkuiActionSheetItem__children')]")
+    item_texts = [item.text.strip() for item in menu_labels if item.text.strip()]
+
+    expected_items = {"Редактировать", "Настроить доступ", "Удалить"}
+    assert expected_items.issubset(set(item_texts)), f"Не найдены все ожидаемые пункты: {item_texts}"
+
+
+#Предупреждение перед удалением аудитории
+def test_delete_audience_modal_appears(driver):
+    driver.get("https://ads.vk.com/hq/audience")
+
+    first_row = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.XPATH, "//div[@role='row' and contains(@class, 'BaseTable__row')]"))
+    )
+    ActionChains(driver).move_to_element(first_row).perform()
+
+    menu_button = WebDriverWait(driver, 5).until(
+        EC.element_to_be_clickable((By.XPATH, "//button[@data-testid='audience-item-menu']"))
+    )
+    menu_button.click()
+
+    menu_container = WebDriverWait(driver, 5).until(
+        EC.presence_of_element_located((By.CLASS_NAME, "ContextMenu_dropdown__8lPu0"))
+    )
+    delete_button = WebDriverWait(menu_container, 5).until(
+        EC.element_to_be_clickable((By.XPATH, ".//label//span[text()='Удалить']"))
+    )
+    delete_button.click()
+
+    modal_title = WebDriverWait(driver, 5).until(
+        EC.visibility_of_element_located((By.XPATH, "//span[text()='Удалить аудиторию?']"))
+    )
+    assert modal_title.is_displayed(), "Модальное окно не появилось"
+
+    cancel_button = WebDriverWait(driver, 5).until(
+        EC.element_to_be_clickable((By.XPATH, "//button[@data-testid='cancel']//span[text()='Отменить']"))
+    )
+    delete_confirm_button = WebDriverWait(driver, 5).until(
+        EC.element_to_be_clickable((By.XPATH, "//button[@data-testid='submit']//span[text()='Удалить']"))
+    )
+
+    assert cancel_button.is_displayed(), "Кнопка 'Отменить' не найдена"
+    assert delete_confirm_button.is_displayed(), "Кнопка 'Удалить' не найдена"
+
+    cancel_button.click()
+
