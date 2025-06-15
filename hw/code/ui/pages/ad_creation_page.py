@@ -31,7 +31,7 @@ class AdCreationPage(BasePage):
         self.driver.execute_script("arguments[0].innerText = '';", title_input)
         title_input.send_keys(name)
 
-    def edit_ad_short_description(self, description):
+    def edit_ad_short_description(self, description: str):
         self.wait().until(
             EC.visibility_of_element_located(self.locators.DESCRIPTION_INPUT)
         )
@@ -190,5 +190,5 @@ class AdCreationPage(BasePage):
 
         self.click(self.locators.SAVE_DRAFTS_BUTTON)
 
-        # self.wait().until(EC.element_to_be_clickable(self.locators.TO_PUBLISH_BUTTON))
-        # self.click(self.locators.TO_PUBLISH_BUTTON)
+        self.wait().until(EC.element_to_be_clickable(self.locators.TO_PUBLISH_BUTTON))
+        self.click(self.locators.TO_PUBLISH_BUTTON)
