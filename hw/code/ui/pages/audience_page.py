@@ -1,4 +1,3 @@
-from time import sleep
 from ..pages.base_page import BasePage
 from ..locators.audience_page_locators import AudiencePageLocator
 import re
@@ -7,6 +6,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import TimeoutException
+from ..constants import DEFAULT_TIMEOUT
 
 class AudiencePage(BasePage):
     url_pattern = re.compile(r"ads\.vk\.com/hq/audience")
@@ -21,15 +22,21 @@ class AudiencePage(BasePage):
         name_input = self.find(AudiencePageLocator.AUDIENCE_NAME_INPUT)
         name_input.clear()
         name_input.send_keys(name)
+    
+    def is_name_length_error_visible(self):
+        try:
+            error = WebDriverWait(self.driver, DEFAULT_TIMEOUT).until(
+                EC.visibility_of_element_located(AudiencePageLocator.NAME_LENGTH_ERROR)
+            )
+            return error.is_displayed()
+        except TimeoutException:
+            return False
 
-    # def click_add_source(self):
-    #     self.click(AudiencePageLocator.ADD_SOURCE_BUTTON)
     def click_add_source(self):
         wait = WebDriverWait(self.driver, 10)
         btn = wait.until(EC.element_to_be_clickable(AudiencePageLocator.ADD_SOURCE_BUTTON))
 
         self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", btn)
-        sleep(0.5)
         self.driver.execute_script("arguments[0].click();", btn)
 
     def click_social_group_button(self):
@@ -47,7 +54,6 @@ class AudiencePage(BasePage):
 
         search_input.click()
         search_input.send_keys(name)
-        sleep(2)
 
 
     def click_communities_header(self):
@@ -73,7 +79,6 @@ class AudiencePage(BasePage):
                 self.driver.execute_script(
                     "arguments[0].scrollIntoView({block: 'center'});", btn
                 )
-                sleep(0.5)
                 self.driver.execute_script("arguments[0].click();", btn)
                 break
     
@@ -87,7 +92,6 @@ class AudiencePage(BasePage):
         wait = WebDriverWait(self.driver, 10)
         btn = wait.until(EC.element_to_be_clickable(AudiencePageLocator.ADD_SOURCE_BUTTON_IN_LIST))
         self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", btn)
-        sleep(0.5)
         self.driver.execute_script("arguments[0].click();", btn)
     
 
