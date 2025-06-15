@@ -18,7 +18,9 @@ def group_editing_page(driver: WebDriver):
     return group_editing_page
 
 
-def test_should_save_title_changes_when_changes_saved(driver: WebDriver, group_editing_page: GroupEditingPage):
+def test_should_save_title_changes_when_changes_saved(
+    driver: WebDriver, group_editing_page: GroupEditingPage
+):
     new_title = f"Новое название {random_test_number()}"
     group_editing_page.change_title(new_title)
     group_editing_page.save_changes()
@@ -26,7 +28,9 @@ def test_should_save_title_changes_when_changes_saved(driver: WebDriver, group_e
     assert group_editing_page.get_title() == new_title
 
 
-def test_should_not_save_title_changes_when_changes_not_saved(driver: WebDriver, group_editing_page: GroupEditingPage):
+def test_should_not_save_title_changes_when_changes_not_saved(
+    driver: WebDriver, group_editing_page: GroupEditingPage
+):
     new_title = f"Новое название {random_test_number()}"
     group_editing_page.change_title(new_title)
     driver.refresh()

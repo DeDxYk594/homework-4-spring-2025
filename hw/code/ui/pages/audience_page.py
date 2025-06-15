@@ -1,6 +1,6 @@
 from time import sleep
-from..pages.base_page import BasePage
-from..locators.audience_page_locators import AudiencePageLocator
+from ..pages.base_page import BasePage
+from ..locators.audience_page_locators import AudiencePageLocator
 import re
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.remote.webdriver import WebDriver
@@ -9,7 +9,7 @@ from selenium.webdriver.remote.webdriver import WebDriver
 class AudiencePage(BasePage):
     url_pattern = re.compile(r"ads\.vk\.com/hq/audience")
 
-    def __init__(self, driver:WebDriver):
+    def __init__(self, driver: WebDriver):
         super().__init__(driver)
 
     def click_create_audience(self):
@@ -23,7 +23,6 @@ class AudiencePage(BasePage):
     def click_add_source(self):
         self.click(AudiencePageLocator.ADD_SOURCE_BUTTON)
 
-
     def click_social_group_button(self):
         self.click(AudiencePageLocator.SOCIAL_GROUP_BUTTON)
 
@@ -35,7 +34,6 @@ class AudiencePage(BasePage):
     def click_communities_header(self):
         self.click(AudiencePageLocator.VK_COMMUNITIES_HEADER)
 
-
     def click_first_group_result(self):
         self.click(AudiencePageLocator.FIRST_GROUP_RESULT)
 
@@ -46,7 +44,9 @@ class AudiencePage(BasePage):
         buttons = self.driver.find_elements(*AudiencePageLocator.SAVE_BUTTON)
         for btn in buttons:
             if btn.is_displayed():
-                self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", btn)
+                self.driver.execute_script(
+                    "arguments[0].scrollIntoView({block: 'center'});", btn
+                )
                 sleep(0.5)
                 self.driver.execute_script("arguments[0].click();", btn)
                 break

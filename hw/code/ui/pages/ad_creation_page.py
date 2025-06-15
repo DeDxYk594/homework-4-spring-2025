@@ -21,6 +21,68 @@ class AdCreationPage(BasePage):
         title_input.clear()
         title_input.send_keys(name)
 
+    def edit_ad_title(self, name: str):
+        self.wait().until(EC.visibility_of_element_located(self.locators.HEADER_INPUT))
+        title_input = self.find(self.locators.HEADER_INPUT)
+        self.driver.execute_script("arguments[0].innerText = '';", title_input)
+        title_input.send_keys(name)
+        actual_text = (
+            self.driver.execute_script("return arguments[0].value", title_input)
+            or title_input.get_attribute("value")
+            or title_input.text
+        )
+        return actual_text
+
+    def edit_ad_short_description(self, description):
+        self.wait().until(
+            EC.visibility_of_element_located(self.locators.DESCRIPTION_INPUT)
+        )
+        desc = self.find(self.locators.DESCRIPTION_INPUT)
+        self.driver.execute_script("arguments[0].innerText = '';", desc)
+        desc.send_keys(description)
+        actual_text = (
+            self.driver.execute_script("return arguments[0].value", desc)
+            or desc.get_attribute("value")
+            or desc.text
+        )
+        return actual_text
+
+    def change_photo(self):
+        self.wait().until(
+            EC.element_to_be_clickable(self.locators.CHANGE_IMAGES_BUTTON)
+        )
+        self.click(self.locators.CHANGE_IMAGES_BUTTON)
+        self.click(self.locators.IMAGE_SELECT)
+
+    def click_button_by_text(self, text):
+        locator = (By.XPATH, f"//button[.//span[text()='{text}']]")
+        self.wait().until(EC.visibility_of_element_located(locator))
+        button = self.driver.find_element(*locator)
+        button.click()
+
+    def get_preview_title(self):
+        self.wait().until(EC.visibility_of_element_located(self.locators.PREVIEW_TITLE))
+        desc = self.driver.find_element(*self.locators.PREVIEW_TITLE)
+        actual_text = (
+            self.driver.execute_script("return arguments[0].value", desc)
+            or desc.get_attribute("value")
+            or desc.text
+        )
+        return actual_text
+
+    def get_native_block_preview_title(self):
+        desc = self.driver.find_element(*self.locators.NATIVE_BLOCK_PREVIEW_TITLE)
+        actual_text = (
+            self.driver.execute_script("return arguments[0].value", desc)
+            or desc.get_attribute("value")
+            or desc.text
+        )
+        return actual_text
+
+    def get_preview_video(self):
+        self.wait().until(EC.visibility_of_element_located(self.locators.PREVIEW_VIDEO))
+        return self.driver.find_element(*self.locators.PREVIEW_VIDEO)
+
     def select_site_option(self):
         self.click(self.locators.SITE_OPTION)
 
@@ -130,5 +192,5 @@ class AdCreationPage(BasePage):
 
         self.click(self.locators.SAVE_DRAFTS_BUTTON)
 
-        self.wait().until(EC.element_to_be_clickable(self.locators.TO_PUBLISH_BUTTON))
-        self.click(self.locators.TO_PUBLISH_BUTTON)
+        # self.wait().until(EC.element_to_be_clickable(self.locators.TO_PUBLISH_BUTTON))
+        # self.click(self.locators.TO_PUBLISH_BUTTON)

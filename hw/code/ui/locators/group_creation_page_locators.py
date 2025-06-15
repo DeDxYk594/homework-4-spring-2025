@@ -6,7 +6,10 @@ class GroupCreationPageLocators:
         By.XPATH,
         "//span[@class='vkuiButton__in'][.//span[text()='Продолжить']]",
     )
-    PREDICTION_AUDITORY = (By.XPATH, "//div[contains(@class, 'Prediction_itemAuditoryValue')]")
+    PREDICTION_AUDITORY = (
+        By.XPATH,
+        "//div[contains(@class, 'Prediction_itemAuditoryValue')]",
+    )
 
     @staticmethod
     def select_city(city: str):

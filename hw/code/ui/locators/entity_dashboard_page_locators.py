@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 
+
 class EntityDashboardPageLocator:
     PLAN_ROW = (
         By.XPATH,
@@ -10,6 +11,6 @@ class EntityDashboardPageLocator:
         "//*[contains(concat(' ', @class, ' '), 'vkuiIcon--write_outline_20')]",
     )
     CREATE_BUTTON = (
-    By.XPATH,
-    "//*[contains(concat(' ', @class, ' '), ' vkuiButton__content ') and text()='Создать']"
+        By.XPATH,
+        "//*[contains(concat(' ', @class, ' '), ' vkuiButton__content ') and text()='Создать']",
     )

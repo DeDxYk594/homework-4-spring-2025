@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 
+
 class AudiencePageLocator:
     CREATE_AUDIENCE_BUTTON = (By.XPATH, "//span[text()='Создать аудиторию']")
     SOCIAL_GROUP_BUTTON = (By.XPATH, "//span[contains(text(),'Сообщества ВКонтакте')]")
@@ -12,14 +13,8 @@ class AudiencePageLocator:
 
     VK_COMMUNITIES_HEADER = (By.CSS_SELECTOR, "[data-testid='header-title']")
 
-    FIRST_GROUP_RESULT = (
-        By.CSS_SELECTOR,
-        ".GroupContentItem_item__6gQso"
-    )
+    FIRST_GROUP_RESULT = (By.CSS_SELECTOR, ".GroupContentItem_item__6gQso")
 
-    EXIT_GROUP_SELECTION_TITLE = (
-        By.XPATH,
-        "//h2[text()='Подписчики сообществ']"
-    )
+    EXIT_GROUP_SELECTION_TITLE = (By.XPATH, "//h2[text()='Подписчики сообществ']")
 
     SAVE_BUTTON = (By.CSS_SELECTOR, 'button[data-testid="submit"]')

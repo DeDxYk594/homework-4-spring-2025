@@ -1,5 +1,6 @@
 from selenium.webdriver.common.by import By
 
+
 class AddSourceModalLocator:
     HEADER = (By.CSS_SELECTOR, "[data-testid='modal-header']")
     ADD_EXISTING_AUDIENCE = (By.CSS_SELECTOR, "[data-testid='existsAudience']")
