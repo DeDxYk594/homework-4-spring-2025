@@ -1,6 +1,5 @@
 from selenium.webdriver.common.by import By
 
-
 class AdCreationPageLocator:
     EDIT_ICON = (By.CSS_SELECTOR, ".EditableTitle_editIcon__shXc4")
     TITLE_INPUT = (By.CSS_SELECTOR, "input.vkuiInput__el")

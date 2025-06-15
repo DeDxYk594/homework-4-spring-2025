@@ -470,4 +470,3 @@ def test_delete_audience_modal_appears(driver):
     assert delete_confirm_button.is_displayed(), "Кнопка 'Удалить' не найдена"
 
     cancel_button.click()
-
