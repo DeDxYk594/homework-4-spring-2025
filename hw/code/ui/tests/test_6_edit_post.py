@@ -1,6 +1,7 @@
 import pytest
 from selenium.webdriver.remote.webdriver import WebDriver
 from ..pages.entity_dashboard_page import EntityDashboardPage
+from ..pages.ad_creation_page import AdCreationPage
 
 
 @pytest.fixture
@@ -20,11 +21,12 @@ def setup_ad_creation(driver: WebDriver):
     return ad_creation_page
 
 
-def test_6_edit_post(driver: WebDriver, setup_ad_creation):
+def test_6_edit_post(driver: WebDriver, setup_ad_creation: AdCreationPage):
     ad_creation_page = setup_ad_creation
 
     test_title = "test_title"
-    actual_title = ad_creation_page.edit_ad_title(name=test_title)
+    ad_creation_page.edit_ad_title(test_title)
+    actual_title = ad_creation_page.get_ad_title()
     assert actual_title == test_title
 
     test_description = "test_description"

@@ -21,17 +21,15 @@ class AdCreationPage(BasePage):
         title_input.clear()
         title_input.send_keys(name)
 
+    def get_ad_title(self):
+        title_input = self.find(self.locators.HEADER_INPUT)
+        return title_input.text
+
     def edit_ad_title(self, name: str):
         self.wait().until(EC.visibility_of_element_located(self.locators.HEADER_INPUT))
         title_input = self.find(self.locators.HEADER_INPUT)
         self.driver.execute_script("arguments[0].innerText = '';", title_input)
         title_input.send_keys(name)
-        actual_text = (
-            self.driver.execute_script("return arguments[0].value", title_input)
-            or title_input.get_attribute("value")
-            or title_input.text
-        )
-        return actual_text
 
     def edit_ad_short_description(self, description):
         self.wait().until(
