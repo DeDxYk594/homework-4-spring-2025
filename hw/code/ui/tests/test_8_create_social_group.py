@@ -139,7 +139,6 @@ def test_save_without_sources_button_disabled(driver):
     page.click_create_audience()
     page.enter_audience_name("Аудитория без источников")
 
-    # Ищем кнопку "Сохранить"
     save_buttons = driver.find_elements(*AudiencePageLocator.SAVE_BUTTON)
 
     # Проверяем, что хотя бы одна из них отключена
@@ -281,6 +280,8 @@ def test_add_app_category_source(driver):
     assert created_audience.is_displayed(), "Созданная аудитория не появилась в списке"
 
 
+
+#Добавление аудитории по подписчикам сообществ
 def test_add_social_group_source(driver):
     driver.get("https://ads.vk.com/hq/audience")
     page = AudiencePage(driver)
@@ -293,25 +294,23 @@ def test_add_social_group_source(driver):
     page.select_first_group_item()
     page.click_communities_header()
 
-    print("Нажимаем Сохранить")
     page.click_save_button()
 
+    icons = driver.find_elements(*AudiencePageLocator.DELETE_ICON)
     delete_icon = WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, "svg.Header_delete__oUhre"))
+        EC.visibility_of_element_located(AudiencePageLocator.DELETE_ICON)
     )
+    assert delete_icon.is_displayed(), "Иконка удаления не видна"
 
-    time.sleep(1)
-
-    WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.CSS_SELECTOR, "svg.Header_delete__oUhre"))
-    )
-
-    delete_icon.click()
+    ActionChains(driver).move_to_element(delete_icon).click().perform()
 
     confirmation_modal = WebDriverWait(driver, 5).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, "[data-testid='modal-confirm']"))
+        EC.visibility_of_element_located(AudiencePageLocator.DELETE_CONFIRM_MODAL)
     )
     assert confirmation_modal.is_displayed(), "Модальное окно подтверждения удаления не появилось"
+
+
+
 
 #Источник Список пользователей из файла
 def test_upload_user_list_file(driver):
@@ -339,7 +338,7 @@ def test_upload_user_list_file(driver):
     combobox.click()
 
     vk_option = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, "//div[contains(@class, 'CustomSelectOption') and text()='ID ВКонтакте']"))
+        EC.visibility_of_element_located(AudiencePageLocator.VK_ID_OPTION)
     )
     vk_option.click()
 
@@ -354,9 +353,10 @@ def test_upload_user_list_file(driver):
 
     source_selector = (By.XPATH, "//span[@data-testid='header' and contains(text(), 'Список пользователей')]")
     source_element = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located(source_selector)
+        EC.visibility_of_element_located(AudiencePageLocator.SOURCE_USERS_LIST_HEADER)
     )
     assert source_element.is_displayed(), "Источник 'Список пользователей' не появился после загрузки файла"
+
 
 #Проверка появления уведомления о том, что в загружаемом списке недостаточно записей
 def test_upload_empty_user_list_file(driver):
@@ -366,7 +366,6 @@ def test_upload_empty_user_list_file(driver):
     audience_name = "Аудитория с пустым списком"
     page.click_create_audience()
     page.enter_audience_name(audience_name)
-
     page.click_add_source()
 
     WebDriverWait(driver, 10).until(
@@ -382,10 +381,9 @@ def test_upload_empty_user_list_file(driver):
     )
     combobox.click()
 
-    vk_option = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, "//div[contains(@class, 'CustomSelectOption') and text()='ID ВКонтакте']"))
-    )
-    vk_option.click()
+    WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located(AudiencePageLocator.VK_ID_OPTION)
+    ).click()
 
     file_input = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located(AudiencePageLocator.FILE_UPLOAD_INPUT)
@@ -395,15 +393,15 @@ def test_upload_empty_user_list_file(driver):
 
     page.click_save_button()
 
-    error_snackbar_selector = (By.XPATH, "//div[contains(@class, 'Snackbar_text__pDXKB') and text()='В списке недостаточно записей']")
     error_element = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located(error_snackbar_selector)
+        EC.visibility_of_element_located(AudiencePageLocator.ERROR_SNACKBAR_NOT_ENOUGH_ENTRIES)
     )
     assert error_element.is_displayed(), "Оповещение о недостаточности записей не появилось"
 
     WebDriverWait(driver, 10).until_not(
-        EC.visibility_of_element_located(error_snackbar_selector)
+        EC.visibility_of_element_located(AudiencePageLocator.ERROR_SNACKBAR_NOT_ENOUGH_ENTRIES)
     )
+
 
 
 #Существуют кнопки "Редактировать", "Настроить доступ", "Удалить"
@@ -411,25 +409,26 @@ def test_audience_list_has_rows_and_menu(driver):
     driver.get("https://ads.vk.com/hq/audience")
 
     first_row = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, "//div[@role='row' and contains(@class, 'BaseTable__row')]"))
+        EC.visibility_of_element_located(AudiencePageLocator.FIRST_AUDIENCE_ROW)
     )
-
     ActionChains(driver).move_to_element(first_row).perform()
 
     menu_button = WebDriverWait(driver, 5).until(
-        EC.element_to_be_clickable((By.XPATH, "//button[@data-testid='audience-item-menu']"))
+        EC.element_to_be_clickable(AudiencePageLocator.AUDIENCE_ROW_MENU_BUTTON)
     )
     menu_button.click()
 
-    menu_container = WebDriverWait(driver, 5).until(
-        EC.presence_of_element_located((By.CLASS_NAME, "ContextMenu_dropdown__8lPu0"))
+    menu_labels = WebDriverWait(driver, 5).until(
+        EC.presence_of_all_elements_located(
+            (By.XPATH, "//label//span[contains(@class, 'vkuiActionSheetItem__children')]")
+        )
     )
-
-    menu_labels = menu_container.find_elements(By.XPATH, ".//label//span[contains(@class, 'vkuiActionSheetItem__children')]")
     item_texts = [item.text.strip() for item in menu_labels if item.text.strip()]
 
     expected_items = {"Редактировать", "Настроить доступ", "Удалить"}
     assert expected_items.issubset(set(item_texts)), f"Не найдены все ожидаемые пункты: {item_texts}"
+
+
 
 
 #Предупреждение перед удалением аудитории
@@ -437,37 +436,33 @@ def test_delete_audience_modal_appears(driver):
     driver.get("https://ads.vk.com/hq/audience")
 
     first_row = WebDriverWait(driver, 10).until(
-        EC.visibility_of_element_located((By.XPATH, "//div[@role='row' and contains(@class, 'BaseTable__row')]"))
+        EC.visibility_of_element_located(AudiencePageLocator.FIRST_AUDIENCE_ROW)
     )
     ActionChains(driver).move_to_element(first_row).perform()
 
     menu_button = WebDriverWait(driver, 5).until(
-        EC.element_to_be_clickable((By.XPATH, "//button[@data-testid='audience-item-menu']"))
+        EC.element_to_be_clickable(AudiencePageLocator.AUDIENCE_ROW_MENU_BUTTON)
     )
     menu_button.click()
 
-    menu_container = WebDriverWait(driver, 5).until(
-        EC.presence_of_element_located((By.CLASS_NAME, "ContextMenu_dropdown__8lPu0"))
-    )
-    delete_button = WebDriverWait(menu_container, 5).until(
-        EC.element_to_be_clickable((By.XPATH, ".//label//span[text()='Удалить']"))
+    delete_button = WebDriverWait(driver, 5).until(
+        EC.element_to_be_clickable(AudiencePageLocator.AUDIENCE_MENU_DELETE_BUTTON)
     )
     delete_button.click()
 
     modal_title = WebDriverWait(driver, 5).until(
-        EC.visibility_of_element_located((By.XPATH, "//span[text()='Удалить аудиторию?']"))
+        EC.visibility_of_element_located(AudiencePageLocator.DELETE_MODAL_TITLE)
     )
     assert modal_title.is_displayed(), "Модальное окно не появилось"
 
     cancel_button = WebDriverWait(driver, 5).until(
-        EC.element_to_be_clickable((By.XPATH, "//button[@data-testid='cancel']//span[text()='Отменить']"))
+        EC.element_to_be_clickable(AudiencePageLocator.MODAL_CANCEL_BUTTON_TEXT)
     )
     delete_confirm_button = WebDriverWait(driver, 5).until(
-        EC.element_to_be_clickable((By.XPATH, "//button[@data-testid='submit']//span[text()='Удалить']"))
+        EC.element_to_be_clickable(AudiencePageLocator.MODAL_SUBMIT_BUTTON_TEXT)
     )
 
     assert cancel_button.is_displayed(), "Кнопка 'Отменить' не найдена"
     assert delete_confirm_button.is_displayed(), "Кнопка 'Удалить' не найдена"
 
     cancel_button.click()
-
