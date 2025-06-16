@@ -10,7 +10,9 @@ class AdCreationPageLocator:
 
     SITE_INPUT = (By.CSS_SELECTOR, "input[data-testid='site-select-input']")
 
-    BUDGET_INPUT = (By.XPATH, "//input[@inputmode='decimal']")
+    BUDGET_INPUT = (By.XPATH, "//input[@placeholder='Не задан' and @inputmode='decimal']")
+
+    
 
     CONTINUE_BUTTON = (By.CSS_SELECTOR, "button[data-testid='next-step-button']")
 
@@ -19,19 +21,18 @@ class AdCreationPageLocator:
         "button[data-testid='ad-placement-button']",
     )
 
-    PREVIEW_TITLE = (By.XPATH, "//h3[contains(@class, 'Header_name')]")
+    PREVIEW_TITLE = (By.CSS_SELECTOR, "div[data-testid='ad-preview'] h3")
 
-    TITLE_ERROR_MESSAGE = (By.XPATH, "//ul[contains(@class, 'TextErrors_errorsList')]")
+    NATIVE_BLOCK_PREVIEW_TITLE = (
+        By.CSS_SELECTOR,
+        "div[data-testid='ad-preview'] h3"
+    )
 
     PREVIEW_VIDEO = (
-        By.XPATH,
-        "//section[contains(@class, 'VerticalVideoPreview_container')]",
+        By.CSS_SELECTOR,
+        "div[data-testid='ad-preview'] video"
     )
 
-    PREVIEW_STREAM = (
-        By.XPATH,
-        "//section[contains(@class, 'PreviewInStream_section')]",
-    )
 
     REGION_MOSCOW_BUTTON = (
         By.CSS_SELECTOR,
@@ -49,16 +50,16 @@ class AdCreationPageLocator:
 
     LOGO_SELECT = (
         By.XPATH,
-        "//span[@class='vkuiButton__content'][.//span[contains(@class, 'UploadMediaButton_buttonLogoTitle') and text()='Выбрать логотип']]",
+        "//span[@class='vkuiButton__content']//span[text()='Выбрать логотип']"
     )
-    IMAGE_SELECT = (
-        By.XPATH,
-        "//div[@data-testid='image-media-item-loaded']",
-    )
+
+    IMAGE_SELECT = (By.XPATH, "//div[contains(@class, 'ImageItem_image')]")
+
     MEDIA_BUTTON = (
         By.XPATH,
-        "//div[@data-testid='open-media-library-button' and contains(.//span, 'Медиатека')]",
+        "//div[starts-with(@class, 'PhotoStockMediaFileSelector_section__')]",
     )
+
     ADD_IMAGES_BUTTON = (
         By.XPATH,
         "//button[@data-testid='submit' and contains(.//span, 'Добавить')]",
@@ -92,4 +93,8 @@ class AdCreationPageLocator:
     TO_PUBLISH_BUTTON = (
         By.XPATH,
         "//span[@class='vkuiButton__in'][.//span[@class='vkuiButton__content' and text()='Опубликовать']]",
+    )
+    SECOND_MEDIA_IMAGE = (
+        By.CSS_SELECTOR,
+        "div[data-testid='image-item']"
     )

@@ -5,6 +5,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from ..locators.ad_creation_page_locators import AdCreationPageLocator
 import time
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
+
 
 
 class AdCreationPage(BasePage):
@@ -103,11 +108,20 @@ class AdCreationPage(BasePage):
         site_input.clear()
         site_input.send_keys(url)
 
+
     def enter_budget(self, amount: str):
         self.wait().until(EC.presence_of_element_located(self.locators.BUDGET_INPUT))
         budget_input = self.find(self.locators.BUDGET_INPUT)
-        budget_input.clear()
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", budget_input)
+
+        ActionChains(self.driver).move_to_element(budget_input).perform()
+
+        budget_input.click()
+
+        budget_input.send_keys(Keys.CONTROL, "a")
+        budget_input.send_keys(Keys.BACKSPACE)
         budget_input.send_keys(amount)
+
 
     def click_continue(self):
         self.click(self.locators.CONTINUE_BUTTON)
@@ -129,17 +143,6 @@ class AdCreationPage(BasePage):
         textarea.send_keys(title)
         self.click(self.locators.APPLY_GENERATED_TITLE_BUTTON)
 
-    def select_second_stock_image(self):
-        images = self.find_all(
-            (By.CLASS_NAME, "PhotoStockImagesPreview_itemContent__DoHxc")
-        )
-        if len(images) >= 2:
-            images[1].click()
-
-    def select_second_media_option(self):
-        options = self.find_all((By.CSS_SELECTOR, "div[data-name^='content:::image_']"))
-        if len(options) >= 2:
-            options[1].click()
 
     def click_choose_logo(self):
         self.click((By.CSS_SELECTOR, "button[data-testid='set-global-image']"))
@@ -151,16 +154,14 @@ class AdCreationPage(BasePage):
         self.click((By.CSS_SELECTOR, "div[data-testid='image-media-item-loaded']"))
 
     def select_second_media_option(self):
-        self.wait().until(
-            EC.presence_of_element_located(
-                (By.CSS_SELECTOR, "div[data-name^='content:::image_']")
-            )
-        )
-        options = self.find_all((By.CSS_SELECTOR, "div[data-name^='content:::image_']"))
+        # Ждём появления хотя бы двух элементов с data-testid='image-item'
+        self.wait().until(lambda d: len(d.find_elements(By.CSS_SELECTOR, "div[data-testid='image-item']")) >= 2)
+
+        options = self.driver.find_elements(By.CSS_SELECTOR, "div[data-testid='image-item']")
         if len(options) >= 2:
             options[1].click()
         else:
-            raise Exception("Не найдено второе изображение для выбора")
+            raise Exception("Второе изображение не найдено для выбора")
 
     def select_second_stock_image(self):
         self.wait().until(
@@ -176,8 +177,15 @@ class AdCreationPage(BasePage):
         else:
             raise Exception("Второе изображение не найдено в фотостоке")
 
+
+
     def click_publish(self):
+        self.wait().until(
+            EC.element_to_be_clickable((By.CSS_SELECTOR, "button[data-testid='submit-button']"))
+        )
         self.click((By.CSS_SELECTOR, "button[data-testid='submit-button']"))
+
+
 
     def fill_with_simple_test_data(self):
         """fills ad with the minimum required data to create ad"""
@@ -203,7 +211,5 @@ class AdCreationPage(BasePage):
         self.click(self.locators.IMAGE_SELECT)
 
         self.click(self.locators.ADD_IMAGES_BUTTON)
-
-        time.sleep(5)
 
         self.click(self.locators.SAVE_DRAFTS_BUTTON)
