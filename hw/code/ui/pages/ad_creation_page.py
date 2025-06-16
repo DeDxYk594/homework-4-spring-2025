@@ -14,13 +14,6 @@ class AdCreationPage(BasePage):
     def __init__(self, driver: WebDriver):
         super().__init__(driver)
 
-    def edit_campaign_title(self, name: str):
-        self.click(self.locators.TITLE_EDIT_ICON)
-        title_input = self.find(self.locators.TITLE_INPUT)
-        self.driver.execute_script("arguments[0].innerText = '';", title_input)
-        title_input.clear()
-        title_input.send_keys(name)
-
     def get_ad_title(self):
         title_input = self.find(self.locators.HEADER_INPUT)
         return title_input.text
@@ -68,8 +61,23 @@ class AdCreationPage(BasePage):
         )
         return actual_text
 
-    def get_native_block_preview_title(self):
-        desc = self.driver.find_element(*self.locators.NATIVE_BLOCK_PREVIEW_TITLE)
+    def get_title_error_message(self):
+        self.wait().until(
+            EC.visibility_of_element_located(self.locators.TITLE_ERROR_MESSAGE)
+        )
+        desc = self.driver.find_element(*self.locators.TITLE_ERROR_MESSAGE)
+        actual_text = (
+            self.driver.execute_script("return arguments[0].value", desc)
+            or desc.get_attribute("value")
+            or desc.text
+        )
+        return actual_text
+
+    def get_description_error_message(self):
+        self.wait().until(
+            EC.visibility_of_element_located(self.locators.DESCRIPTION_BLOCK_ERROR)
+        )
+        desc = self.driver.find_element(*self.locators.DESCRIPTION_BLOCK_ERROR)
         actual_text = (
             self.driver.execute_script("return arguments[0].value", desc)
             or desc.get_attribute("value")
@@ -80,6 +88,12 @@ class AdCreationPage(BasePage):
     def get_preview_video(self):
         self.wait().until(EC.visibility_of_element_located(self.locators.PREVIEW_VIDEO))
         return self.driver.find_element(*self.locators.PREVIEW_VIDEO)
+
+    def get_preview_stream(self):
+        self.wait().until(
+            EC.visibility_of_element_located(self.locators.PREVIEW_STREAM)
+        )
+        return self.driver.find_element(*self.locators.PREVIEW_STREAM)
 
     def select_site_option(self):
         self.click(self.locators.SITE_OPTION)
@@ -97,6 +111,10 @@ class AdCreationPage(BasePage):
 
     def click_continue(self):
         self.click(self.locators.CONTINUE_BUTTON)
+
+    def click_publish(self):
+        self.wait().until(EC.element_to_be_clickable(self.locators.TO_PUBLISH_BUTTON))
+        self.click(self.locators.TO_PUBLISH_BUTTON)
 
     def select_moscow_region(self):
         self.click(self.locators.REGION_MOSCOW_BUTTON)
@@ -189,6 +207,3 @@ class AdCreationPage(BasePage):
         time.sleep(5)
 
         self.click(self.locators.SAVE_DRAFTS_BUTTON)
-
-        self.wait().until(EC.element_to_be_clickable(self.locators.TO_PUBLISH_BUTTON))
-        self.click(self.locators.TO_PUBLISH_BUTTON)

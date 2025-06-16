@@ -12,7 +12,7 @@ def group_editing_page(driver: WebDriver):
     plan_creation_page.fill_with_simple_test_data()
     group_creation_page = plan_creation_page.go_to_group_creation()
     group_creation_page.fill_with_simple_test_data()
-    ad_creation_page=group_creation_page.go_to_ad_creation()
+    ad_creation_page = group_creation_page.go_to_ad_creation()
     ad_creation_page.fill_with_simple_test_data()
     ad_creation_page.click_publish()
 

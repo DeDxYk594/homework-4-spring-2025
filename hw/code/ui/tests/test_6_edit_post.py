@@ -1,7 +1,11 @@
 import pytest
+import allure
+import time
 from selenium.webdriver.remote.webdriver import WebDriver
 from ..pages.entity_dashboard_page import EntityDashboardPage
 from ..pages.ad_creation_page import AdCreationPage
+
+ALERT_MESSAGE_TEXT_TOO_LONG = "Сократите текст"
 
 
 @pytest.fixture
@@ -21,18 +25,54 @@ def setup_ad_creation(driver: WebDriver):
     return ad_creation_page
 
 
-def test_6_edit_post(driver: WebDriver, setup_ad_creation: AdCreationPage):
-    ad_creation_page = setup_ad_creation
-
-    test_title = "test_title"
-    ad_creation_page.edit_ad_title(test_title)
-    actual_title = ad_creation_page.get_ad_title()
-    assert actual_title == test_title
-
-    test_description = "test_description"
-    actual_text = ad_creation_page.edit_ad_short_description(
-        description=test_description
+@allure.story("Edit post tests")
+class TestEditPosts:
+    @pytest.mark.parametrize(
+        "title,description",
+        [
+            ("test_title", "test_description"),
+        ],
     )
-    assert actual_text == test_description
+    def test_edit_post_ok(self, setup_ad_creation: AdCreationPage, title, description):
+        ad_creation_page = setup_ad_creation
 
-    ad_creation_page.change_photo()
+        ad_creation_page.edit_ad_title(title)
+        actual_title = ad_creation_page.get_ad_title()
+        assert actual_title == title
+
+        actual_text = ad_creation_page.edit_ad_short_description(
+            description=description
+        )
+        assert actual_text == description
+
+        ad_creation_page.change_photo()
+
+    @pytest.mark.parametrize(
+        "title",
+        [
+            ("long_title" * 10),
+        ],
+    )
+    def test_edit_post_long_title_fail(self, setup_ad_creation: AdCreationPage, title):
+        ad_creation_page = setup_ad_creation
+        ad_creation_page.edit_ad_title(title)
+        ad_creation_page.click_publish()
+        error_message = ad_creation_page.get_title_error_message()
+
+        assert error_message == ALERT_MESSAGE_TEXT_TOO_LONG
+
+    @pytest.mark.parametrize(
+        "description",
+        [
+            ("long_description" * 10),
+        ],
+    )
+    def test_edit_post_long_description_fail(
+        self, setup_ad_creation: AdCreationPage, description
+    ):
+        ad_creation_page = setup_ad_creation
+        ad_creation_page.edit_ad_short_description(description)
+        ad_creation_page.click_publish()
+        error_message = ad_creation_page.get_description_error_message()
+
+        assert error_message == ALERT_MESSAGE_TEXT_TOO_LONG

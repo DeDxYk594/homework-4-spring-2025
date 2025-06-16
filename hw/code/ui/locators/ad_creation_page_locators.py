@@ -1,7 +1,7 @@
 from selenium.webdriver.common.by import By
 
+
 class AdCreationPageLocator:
-    EDIT_ICON = (By.CSS_SELECTOR, ".EditableTitle_editIcon__shXc4")
     TITLE_INPUT = (By.CSS_SELECTOR, "input.vkuiInput__el")
     SITE_OPTION = (
         By.XPATH,
@@ -19,10 +19,19 @@ class AdCreationPageLocator:
         "button[data-testid='ad-placement-button']",
     )
 
-    PREVIEW_TITLE = (By.CSS_SELECTOR, "h3.Header_name__fk40s")
+    PREVIEW_TITLE = (By.XPATH, "//h3[contains(@class, 'Header_name')]")
 
-    NATIVE_BLOCK_PREVIEW_TITLE = (By.CSS_SELECTOR, "h3.Header_name__EBzfw")
-    PREVIEW_VIDEO = (By.CSS_SELECTOR, "div.preview_preview__dSxJm video")
+    TITLE_ERROR_MESSAGE = (By.XPATH, "//ul[contains(@class, 'TextErrors_errorsList')]")
+
+    PREVIEW_VIDEO = (
+        By.XPATH,
+        "//section[contains(@class, 'VerticalVideoPreview_container')]",
+    )
+
+    PREVIEW_STREAM = (
+        By.XPATH,
+        "//section[contains(@class, 'PreviewInStream_section')]",
+    )
 
     REGION_MOSCOW_BUTTON = (
         By.CSS_SELECTOR,
@@ -30,8 +39,8 @@ class AdCreationPageLocator:
     )
 
     TITLE_GENERATE_ICON = (
-        By.CSS_SELECTOR,
-        "button.ContentGeneratorButton_magicIconBtn__UsRGX",
+        By.XPATH,
+        "//button[contains(@class, 'ContentGeneratorButton_magicIconBtn')]",
     )
 
     GENERATED_TITLE_TEXTAREA = (By.CSS_SELECTOR, "textarea.vkuiTextarea__el")
@@ -40,12 +49,15 @@ class AdCreationPageLocator:
 
     LOGO_SELECT = (
         By.XPATH,
-        "//span[@class='vkuiButton__content'][.//span[@class='UploadMediaButton_buttonLogoTitle__vMc3N' and text()='Выбрать логотип']]",
+        "//span[@class='vkuiButton__content'][.//span[contains(@class, 'UploadMediaButton_buttonLogoTitle') and text()='Выбрать логотип']]",
     )
-    IMAGE_SELECT = (By.XPATH, "//div[@class='ImageItem_image__XPwIQ']")
+    IMAGE_SELECT = (
+        By.XPATH,
+        "//div[@data-testid='image-media-item-loaded']",
+    )
     MEDIA_BUTTON = (
         By.XPATH,
-        "//div[@class='PhotoStockMediaFileSelector_section__FZFCU']",
+        "//div[@data-testid='open-media-library-button' and contains(.//span, 'Медиатека')]",
     )
     ADD_IMAGES_BUTTON = (
         By.XPATH,
@@ -68,6 +80,10 @@ class AdCreationPageLocator:
         By.XPATH,
         "//div[contains(@class, 'EditableTextField__wrapper')]"
         "/div[@contenteditable='true' and @data-testid='описание, макс. 90 символов']",
+    )
+    DESCRIPTION_BLOCK_ERROR = (
+        By.XPATH,
+        "//*[@data-name='textblock:::text_90']//*[@role='alert']",
     )
     IMAGES_SELECT = (
         By.XPATH,
