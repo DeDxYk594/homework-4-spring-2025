@@ -10,3 +10,8 @@ DEFAULT_AUDIENCE_NAME = "Новая аудитория РИА"
 APP_CATEGORY_AUDIENCE_NAME = "Аудитория с категориями приложений"
 USER_LIST_AUDIENCE_NAME = "Аудитория по списку пользователей"
 EMPTY_USER_LIST_AUDIENCE_NAME = "Аудитория с пустым списком"
+
+TEST_SITE_URL = "kanban-pumpkin.ru"
+TEST_BUDGET = "100"
+TEST_GENERATED_TITLE = "Моя новая публикация"
+IMAGE_GENERATION_TIMEOUT = 20

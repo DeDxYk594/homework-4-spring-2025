@@ -10,7 +10,9 @@ class AdCreationPageLocator:
 
     SITE_INPUT = (By.CSS_SELECTOR, "input[data-testid='site-select-input']")
 
-    BUDGET_INPUT = (By.XPATH, "//input[@inputmode='decimal']")
+    BUDGET_INPUT = (By.XPATH, "//input[@placeholder='Не задан' and @inputmode='decimal']")
+
+    
 
     CONTINUE_BUTTON = (By.CSS_SELECTOR, "button[data-testid='next-step-button']")
 
@@ -19,10 +21,18 @@ class AdCreationPageLocator:
         "button[data-testid='ad-placement-button']",
     )
 
-    PREVIEW_TITLE = (By.CSS_SELECTOR, "h3.Header_name__fk40s")
+    PREVIEW_TITLE = (By.CSS_SELECTOR, "div[data-testid='ad-preview'] h3")
 
-    NATIVE_BLOCK_PREVIEW_TITLE = (By.CSS_SELECTOR, "h3.Header_name__EBzfw")
-    PREVIEW_VIDEO = (By.CSS_SELECTOR, "div.preview_preview__dSxJm video")
+    NATIVE_BLOCK_PREVIEW_TITLE = (
+        By.CSS_SELECTOR,
+        "div[data-testid='ad-preview'] h3"
+    )
+
+    PREVIEW_VIDEO = (
+        By.CSS_SELECTOR,
+        "div[data-testid='ad-preview'] video"
+    )
+
 
     REGION_MOSCOW_BUTTON = (
         By.CSS_SELECTOR,
@@ -40,13 +50,16 @@ class AdCreationPageLocator:
 
     LOGO_SELECT = (
         By.XPATH,
-        "//span[@class='vkuiButton__content'][.//span[@class='UploadMediaButton_buttonLogoTitle__vMc3N' and text()='Выбрать логотип']]",
+        "//span[@class='vkuiButton__content']//span[text()='Выбрать логотип']"
     )
-    IMAGE_SELECT = (By.XPATH, "//div[@class='ImageItem_image__XPwIQ']")
+
+    IMAGE_SELECT = (By.XPATH, "//div[contains(@class, 'ImageItem_image')]")
+
     MEDIA_BUTTON = (
         By.XPATH,
-        "//div[@class='PhotoStockMediaFileSelector_section__FZFCU']",
+        "//div[starts-with(@class, 'PhotoStockMediaFileSelector_section__')]",
     )
+
     ADD_IMAGES_BUTTON = (
         By.XPATH,
         "//button[@data-testid='submit' and contains(.//span, 'Добавить')]",
@@ -76,4 +89,8 @@ class AdCreationPageLocator:
     TO_PUBLISH_BUTTON = (
         By.XPATH,
         "//span[@class='vkuiButton__in'][.//span[@class='vkuiButton__content' and text()='Опубликовать']]",
+    )
+    SECOND_MEDIA_IMAGE = (
+        By.CSS_SELECTOR,
+        "div[data-testid='image-item']"
     )
