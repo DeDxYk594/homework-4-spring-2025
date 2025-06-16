@@ -7,6 +7,8 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from ..locators.ad_creation_page_locators import AdCreationPageLocator
 from ..pages.ad_creation_page import AdCreationPage
+from ..locators.ad_creation_page_locators import IMAGE_ITEM
+
 from ..constants import TEST_SITE_URL, TEST_BUDGET, TEST_GENERATED_TITLE, IMAGE_GENERATION_TIMEOUT
 
 def test_create_campaign_with_site(driver: WebDriver):
@@ -51,7 +53,8 @@ def test_create_campaign_with_site(driver: WebDriver):
     page.open_photo_stock_tab()
     page.choose_generated_logo()
 
-    time.sleep(IMAGE_GENERATION_TIMEOUT)  # ждём генерацию
+    wait.until(lambda d: len(d.find_elements(*IMAGE_ITEM)) > 1)
+
 
     page.select_second_stock_image()
     page.select_second_media_option()

@@ -10,6 +10,16 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 
+from ..locators.ad_creation_page_locators import (
+    CHOOSE_LOGO_BUTTON,
+    PHOTO_STOCK_TAB,
+    GENERATED_LOGO_ITEM,
+    BUTTON_BY_TEXT,
+    SECOND_MEDIA_OPTION_LOCATOR,
+    PHOTO_STOCK_IMAGE_LOCATOR,
+    PUBLISH_BUTTON
+)
+
 
 
 class AdCreationPage(BasePage):
@@ -51,10 +61,9 @@ class AdCreationPage(BasePage):
         self.click(self.locators.IMAGE_SELECT)
 
     def click_button_by_text(self, text):
-        locator = (By.XPATH, f"//button[.//span[text()='{text}']]")
+        locator = BUTTON_BY_TEXT(text)
         self.wait().until(EC.visibility_of_element_located(locator))
-        button = self.driver.find_element(*locator)
-        button.click()
+        self.driver.find_element(*locator).click()
 
     def get_preview_title(self):
         self.wait().until(EC.visibility_of_element_located(self.locators.PREVIEW_TITLE))
@@ -145,33 +154,25 @@ class AdCreationPage(BasePage):
 
 
     def click_choose_logo(self):
-        self.click((By.CSS_SELECTOR, "button[data-testid='set-global-image']"))
+        self.click(CHOOSE_LOGO_BUTTON)
 
     def open_photo_stock_tab(self):
-        self.click((By.CSS_SELECTOR, "div[data-id='photo_stock_and_generated']"))
+        self.click(PHOTO_STOCK_TAB)
 
     def choose_generated_logo(self):
-        self.click((By.CSS_SELECTOR, "div[data-testid='image-media-item-loaded']"))
+        self.click(GENERATED_LOGO_ITEM)
 
     def select_second_media_option(self):
-        # Ждём появления хотя бы двух элементов с data-testid='image-item'
-        self.wait().until(lambda d: len(d.find_elements(By.CSS_SELECTOR, "div[data-testid='image-item']")) >= 2)
-
-        options = self.driver.find_elements(By.CSS_SELECTOR, "div[data-testid='image-item']")
+        self.wait().until(lambda d: len(d.find_elements(*SECOND_MEDIA_OPTION_LOCATOR)) >= 2)
+        options = self.driver.find_elements(*SECOND_MEDIA_OPTION_LOCATOR)
         if len(options) >= 2:
             options[1].click()
         else:
             raise Exception("Второе изображение не найдено для выбора")
 
     def select_second_stock_image(self):
-        self.wait().until(
-            EC.presence_of_all_elements_located(
-                (By.CLASS_NAME, "PhotoStockImagesPreview_itemContent__DoHxc")
-            )
-        )
-        images = self.find_all(
-            (By.CLASS_NAME, "PhotoStockImagesPreview_itemContent__DoHxc")
-        )
+        self.wait().until(EC.presence_of_all_elements_located(PHOTO_STOCK_IMAGE_LOCATOR))
+        images = self.find_all(PHOTO_STOCK_IMAGE_LOCATOR)
         if len(images) >= 2:
             images[1].click()
         else:
@@ -179,11 +180,10 @@ class AdCreationPage(BasePage):
 
 
 
+
     def click_publish(self):
-        self.wait().until(
-            EC.element_to_be_clickable((By.CSS_SELECTOR, "button[data-testid='submit-button']"))
-        )
-        self.click((By.CSS_SELECTOR, "button[data-testid='submit-button']"))
+        self.wait().until(EC.element_to_be_clickable(PUBLISH_BUTTON))
+        self.click(PUBLISH_BUTTON)
 
 
 

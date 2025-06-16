@@ -13,7 +13,7 @@ class AdCreationPageLocator:
     BUDGET_INPUT = (By.XPATH, "//input[@placeholder='Не задан' and @inputmode='decimal']")
 
     
-
+    BUTTON_BY_TEXT = lambda text: (By.XPATH, f"//button[.//span[text()='{text}']]")
     CONTINUE_BUTTON = (By.CSS_SELECTOR, "button[data-testid='next-step-button']")
 
     AD_PLACEMENT_BUTTONS = (
@@ -54,6 +54,13 @@ class AdCreationPageLocator:
     )
 
     IMAGE_SELECT = (By.XPATH, "//div[contains(@class, 'ImageItem_image')]")
+    IMAGE_ITEM = (By.CSS_SELECTOR, "div[data-testid='image-item']")
+    CHOOSE_LOGO_BUTTON = (By.CSS_SELECTOR, "button[data-testid='set-global-image']")
+    PHOTO_STOCK_TAB = (By.CSS_SELECTOR, "div[data-id='photo_stock_and_generated']")
+    GENERATED_LOGO_ITEM = (By.CSS_SELECTOR, "div[data-testid='image-media-item-loaded']")
+    SECOND_MEDIA_OPTION_LOCATOR = (By.CSS_SELECTOR, "div[data-testid='image-item']")
+    PHOTO_STOCK_IMAGE_LOCATOR = (By.CLASS_NAME, "PhotoStockImagesPreview_itemContent__DoHxc")
+
 
     MEDIA_BUTTON = (
         By.XPATH,
@@ -98,3 +105,5 @@ class AdCreationPageLocator:
         By.CSS_SELECTOR,
         "div[data-testid='image-item']"
     )
+
+    PUBLISH_BUTTON = (By.CSS_SELECTOR, "button[data-testid='submit-button']")
