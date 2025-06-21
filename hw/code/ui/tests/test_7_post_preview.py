@@ -1,5 +1,6 @@
 import pytest
 import allure
+import time
 from selenium.webdriver.remote.webdriver import WebDriver
 from ..pages.entity_dashboard_page import EntityDashboardPage
 
@@ -23,32 +24,22 @@ def setup_ad_creation(driver: WebDriver):
 
 @allure.story("Preview Tests")
 class TestPreview:
-    @allure.step("In column preview")
-    def test_preview_in_column(self, setup_ad_creation):
-        setup_ad_creation.click_button_by_text("В колонке")
+    @pytest.mark.parametrize("button", ["В колонке", "Пост", "Нативный блок"])
+    def test_preview_post(self, setup_ad_creation, button):
+        setup_ad_creation.click_button_by_text(button)
         actual_title = setup_ad_creation.get_preview_title()
         assert actual_title == "Тестовое название"
 
-    @allure.step("Post preview")
-    def test_preview_post(self, setup_ad_creation):
-        setup_ad_creation.click_button_by_text("Пост")
-        actual_title = setup_ad_creation.get_preview_title()
-        assert actual_title == "Тестовое название"
-
-    @allure.step("Native block preview")
-    def test_preview_native_block(self, setup_ad_creation):
-        setup_ad_creation.click_button_by_text("Нативный блок")
-        actual_title = setup_ad_creation.get_native_block_preview_title()
-        assert actual_title == "Тестовое название"
-
+    @pytest.mark.parametrize("button_text", ["Полноэкранный блок"])
     @allure.step("Video preview")
-    def test_preview_video(self, setup_ad_creation):
-        setup_ad_creation.click_button_by_text("Ролик в видео")
+    def test_preview_video(self, setup_ad_creation, button_text):
+        setup_ad_creation.click_button_by_text(button_text)
         vid = setup_ad_creation.get_preview_video()
         assert vid != None
 
-    @allure.step("Full screen block preview")
-    def test_preview_full_screen(self, setup_ad_creation):
-        setup_ad_creation.click_button_by_text("Полноэкранный блок")
-        vid = setup_ad_creation.get_preview_video()
-        assert vid != None
+    @pytest.mark.parametrize("button_text", ["Ролик в видео"])
+    @allure.step("Stream preview")
+    def test_preview_stream(self, setup_ad_creation, button_text):
+        setup_ad_creation.click_button_by_text(button_text)
+        stream = setup_ad_creation.get_preview_stream()
+        assert stream != None
