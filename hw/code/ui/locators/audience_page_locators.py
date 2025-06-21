@@ -23,8 +23,6 @@ class AudiencePageLocator:
         '[data-testid="positive-sources-list"] [data-testid="add-source"]',
     )
 
-    SOCIAL_GROUP_BUTTON = (By.CSS_SELECTOR, "[data-testid='appsAndGroups']")
-
     SEARCH_INPUT = (
         By.CSS_SELECTOR,
         "input.vkuiInput__el[placeholder='Введите название сообщества']",
