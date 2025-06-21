@@ -5,6 +5,7 @@ from .plan_creation_page import PlanCreationPage
 from ..locators.entity_dashboard_page_locators import EntityDashboardPageLocator
 import re
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class EntityDashboardPage(BasePage):
@@ -15,6 +16,7 @@ class EntityDashboardPage(BasePage):
         super().__init__(driver)
 
     def go_to_plan_editing(self):
+        self.wait().until(EC.visibility_of_element_located(self.locators.PLAN_ROW))
         row_elem = self.find(self.locators.PLAN_ROW)
         ActionChains(self.driver).move_to_element(row_elem).perform()
         self.click(self.locators.EDIT_BUTTON)

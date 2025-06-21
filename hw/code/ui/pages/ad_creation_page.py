@@ -15,7 +15,7 @@ class AdCreationPage(BasePage):
         super().__init__(driver)
 
     def edit_campaign_title(self, name: str):
-        self.click(self.locators.TITLE_EDIT_ICON)
+        self.click(self.locators.EDIT_ICON)
         title_input = self.find(self.locators.TITLE_INPUT)
         self.driver.execute_script("arguments[0].innerText = '';", title_input)
         title_input.clear()
