@@ -242,7 +242,8 @@ def test_add_app_category_source(driver):
         EC.element_to_be_clickable(AppCategoryLocators.PLATFORM_SELECTOR)
     )
     platform_input.click()
-    platform_input.send_keys("iOS")
+    platform = "iOS"
+    platform_input.send_keys(platform)
     platform_input.send_keys(Keys.ENTER)
 
     # Категория

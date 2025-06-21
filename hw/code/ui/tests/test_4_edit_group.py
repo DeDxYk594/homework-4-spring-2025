@@ -9,11 +9,16 @@ def group_editing_page(driver: WebDriver):
     driver.get("https://ads.vk.com/hq/dashboard/ad_plans")
     page = EntityDashboardPage(driver)
     plan_creation_page = page.go_to_create_plan()
-    plan_creation_page.fill_with_simple_test_data()
+    url = "https://kanban-pumpkin.ru/"
+    main_decription = "Это тестовое описание кампании для автоматизированного тестирования"
+    price = "100"
+    plan_creation_page.fill_with_simple_test_data(url, main_decription, price)
     group_creation_page = plan_creation_page.go_to_group_creation()
     group_creation_page.fill_with_simple_test_data()
     ad_creation_page = group_creation_page.go_to_ad_creation()
-    ad_creation_page.fill_with_simple_test_data()
+    title = "Тестовое название"
+    description = "Тестовое описание"
+    ad_creation_page.fill_with_simple_test_data(title, description)
     ad_creation_page.click_publish()
 
     plan_editing_page = page.go_to_plan_editing()

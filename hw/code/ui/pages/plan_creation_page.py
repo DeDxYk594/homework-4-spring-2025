@@ -14,19 +14,17 @@ class PlanCreationPage(BasePage):
     def __init__(self, driver: WebDriver):
         super().__init__(driver)
 
-    def fill_with_simple_test_data(self):
+    def fill_with_simple_test_data(self, url:str, decription:str, price: str):
         self.click(self.locators.SITE_SELECT)
 
         site_url_input = self.find(self.locators.SITE_URL_INPUT)
         site_url_input.clear()
-        site_url_input.send_keys("https://kanban-pumpkin.ru/")
+        site_url_input.send_keys(url)
         site_url_input.send_keys(Keys.ENTER)
 
         description_textarea = self.find(self.locators.OFFER_DESCRIPTION_TEXTAREA)
         description_textarea.clear()
-        description_textarea.send_keys(
-            "Это тестовое описание кампании для автоматизированного тестирования"
-        )
+        description_textarea.send_keys(decription)
 
         self.click(self.locators.PRICED_GOAL_INPUT)
         first_goal_option = self.find(self.locators.PRICED_GOAL_INPUT)
@@ -38,7 +36,7 @@ class PlanCreationPage(BasePage):
 
         targeting_input = self.find(self.locators.TARGETING_INPUT)
         targeting_input.clear()
-        targeting_input.send_keys("100")
+        targeting_input.send_keys(price)
 
         self.click(self.locators.CALENDAR_BUTTON)
         self.click(self.locators.DAY_SELECT)

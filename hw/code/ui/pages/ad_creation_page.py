@@ -122,16 +122,16 @@ class AdCreationPage(BasePage):
         self.click(self.locators.CHANGE_IMAGES_BUTTON)
         self.click(self.locators.IMAGE_SELECT)
 
-    def fill_with_simple_test_data(self):
+    def fill_with_simple_test_data(self, title:str, description:str):
         self.wait().until(EC.visibility_of_element_located(self.locators.HEADER_INPUT))
         header = self.find(self.locators.HEADER_INPUT)
         self.driver.execute_script("arguments[0].innerText = '';", header)
-        header.send_keys("Тестовое название")
+        header.send_keys(title)
 
         self.wait().until(EC.visibility_of_element_located(self.locators.DESCRIPTION_INPUT))
         desc = self.find(self.locators.DESCRIPTION_INPUT)
         self.driver.execute_script("arguments[0].innerText = '';", desc)
-        desc.send_keys("Тестовое описание")
+        desc.send_keys(description)
 
         self.click(self.locators.LOGO_SELECT)
         self.wait().until(EC.element_to_be_clickable(self.locators.IMAGE_SELECT))
