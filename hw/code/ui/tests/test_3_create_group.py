@@ -10,7 +10,10 @@ def group_creation_page(driver: WebDriver):
     dashboard_page = EntityDashboardPage(driver)
 
     plan_creation_page = dashboard_page.go_to_create_plan()
-    plan_creation_page.fill_with_simple_test_data()
+    url = "https://kanban-pumpkin.ru/"
+    main_decription = "Это тестовое описание кампании для автоматизированного тестирования"
+    price = "100"
+    plan_creation_page.fill_with_simple_test_data(url, main_decription, price)
 
     return plan_creation_page.go_to_group_creation()
 
